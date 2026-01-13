@@ -61,11 +61,11 @@ export default function About() {
   };
 
   return (
-    <section id="sobre" className="relative pt-12 sm:pt-16 md:pt-20 lg:pt-24 xl:pt-0 pb-4 sm:pb-6 md:pb-8 lg:pb-0 px-4 sm:px-6 md:px-8 lg:px-2 container mx-auto">
+    <section id="sobre" className="relative pt-16 md:pt-24 lg:pt-28 pb-8 md:pb-16 lg:pb-20 px-4 md:px-8 container mx-auto">
       {/* Background Grid Sutil */}
       <div className="absolute inset-0 pointer-events-none" />
 
-      <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-15 items-center z-10">
+      <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center z-10">
         
         {/* === COLUNA ESQUERDA === */}
         <motion.div 
@@ -75,21 +75,26 @@ export default function About() {
           className="flex flex-col h-full"
         >
           {/* Textos */}
-          <div className="space-y-1 sm:space-y-1.5 md:space-y-2 mb-6 sm:mb-7 md:mb-8">
-            <span className="text-blue-500 font-black text-[8px] sm:text-[9px] md:text-[10px] tracking-[0.4em] sm:tracking-[0.45em] md:tracking-[0.5em] uppercase">Sócio Estratégico //</span>
-            <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white leading-tight uppercase">
-              Transformando Desafios em <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600 border-white/20" style={{ WebkitTextStroke: '1px rgba(255,255,255,0.2)' }}>Valor Real</span>
+          <div className="space-y-2 md:space-y-3 mb-6 md:mb-8 lg:mb-10">
+            <span className="text-blue-500 font-black text-[8px] md:text-[10px] tracking-[0.4em] md:tracking-[0.5em] uppercase">
+              Sócio Estratégico //
+            </span>
+            <h3 className="text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white leading-tight uppercase">
+              Transformando Desafios em{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600 border-white/20" style={{ WebkitTextStroke: '1px rgba(255,255,255,0.2)' }}>
+                Valor Real
+              </span>
             </h3>
           </div>
 
           {/* Menu de Botões */}
-          <div className="relative flex flex-wrap gap-2 sm:gap-2.5 md:gap-3 mb-8 sm:mb-10 md:mb-12">
-            {iconKeys.map((valor, index) => (
+          <div className="relative flex flex-wrap gap-2 md:gap-3 mb-8 md:mb-10 lg:mb-12">
+            {iconKeys.map((valor) => (
               <button
                 ref={(el) => { buttonRefs.current[valor] = el; }}
                 key={valor}
                 onClick={() => handleManualClick(valor)}
-                className={`relative text-[7px] sm:text-[8px] md:text-[9px] font-black uppercase tracking-widest px-3 sm:px-3.5 md:px-4 py-2 sm:py-2.5 md:py-3 border transition-all duration-300 ${
+                className={`relative text-[8px] md:text-[10px] font-black uppercase tracking-widest px-3 md:px-5 py-2 md:py-3 border transition-all duration-300 ${
                   selected === valor 
                   ? "bg-blue-900/20 border-blue-500 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.4)]" 
                   : "bg-white/5 border-white/10 text-slate-500 hover:border-white/30 hover:text-slate-300"
@@ -97,38 +102,35 @@ export default function About() {
               >
                 {valor}
                 {selected === valor && (
-                  <>
-                    <motion.div 
-                      layoutId="activeTabLine"
-                      className="absolute bottom-0 left-0 right-0 h-[2px] bg-blue-500 shadow-[0_0_10px_#3b82f6]" 
-                    />
-                  </>
+                  <motion.div 
+                    layoutId="activeTabLine"
+                    className="absolute bottom-0 left-0 right-0 h-[2px] bg-blue-500 shadow-[0_0_10px_#3b82f6]" 
+                  />
                 )}
               </button>
             ))}
           </div>
 
           {/* === ÁREA DO SCAN === */}
-          <div className="flex-1 flex items-center justify-center min-h-[200px] sm:min-h-[250px] md:min-h-[300px] relative">
+          <div className="flex-1 flex items-center justify-center min-h-[200px] md:min-h-[280px] lg:min-h-[320px] relative">
 
-            {/* Área do Scan - Sem Borda */}
-            <div ref={iconRef} className="relative w-full max-w-[200px] sm:max-w-[250px] md:max-w-[300px] h-[200px] sm:h-[250px] md:h-[300px] flex items-center justify-center">
+            {/* Área do Scan */}
+            <div ref={iconRef} className="relative w-full max-w-[180px] md:max-w-[250px] lg:max-w-[300px] h-[180px] md:h-[250px] lg:h-[300px] flex items-center justify-center">
               
               {/* Grid Decorativo de Fundo */}
               <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e3a8a10_1px,transparent_1px),linear-gradient(to_bottom,#1e3a8a10_1px,transparent_1px)] bg-[size:20px_20px]" />
               
-              {/* Círculo de Scan Sutil */}
+              {/* Círculo de Scan */}
               <motion.div
                 animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.1, 0.3] }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 border border-blue-500/30 rounded-full will-change-transform pointer-events-none"
+                className="absolute w-24 md:w-36 lg:w-44 h-24 md:h-36 lg:h-44 border border-blue-500/30 rounded-full will-change-transform pointer-events-none"
                 style={{ transform: 'translateZ(0)' }}
               />
 
               {/* Partículas Explodindo */}
               <AnimatePresence mode="wait">
                 {isScanning && particles.map((particle) => {
-                  // Calcular posição inicial nas bordas do polígono
                   const polygonRadius = 80; // metade de w-40 (160px)
                   const startX = Math.cos(particle.angle * Math.PI / 180) * polygonRadius * 0.5;
                   const startY = Math.sin(particle.angle * Math.PI / 180) * polygonRadius * 0.5;
@@ -174,7 +176,7 @@ export default function About() {
                   animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
                   exit={{ opacity: 0, scale: 1.5, filter: "blur(10px)" }}
                   transition={{ duration: 0.4 }}
-                  className="relative z-10 text-blue-400 drop-shadow-[0_0_20px_rgba(59,130,246,0.8)] will-change-transform"
+                  className="relative z-10 text-blue-400 drop-shadow-[0_0_20px_rgba(59,130,246,0.8)] will-change-transform [&>svg]:w-14 md:[&>svg]:w-20 lg:[&>svg]:w-[80px] [&>svg]:h-14 md:[&>svg]:h-20 lg:[&>svg]:h-[80px]"
                   style={{ transform: 'translateZ(0)' }}
                 >
                   {icons[selected]}
@@ -199,23 +201,23 @@ export default function About() {
         </motion.div>
 
         {/* === COLUNA DIREITA: DISPLAY 05 === */}
-        <div className="relative aspect-square flex items-center justify-center mt-12 sm:mt-0">
+        <div className="relative aspect-square flex items-center justify-center mt-8 lg:mt-0 max-w-[260px] md:max-w-[340px] lg:max-w-none mx-auto lg:mx-0">
           <div className="absolute inset-0 border border-white/5 rounded-full" />
-          <div className="absolute inset-6 sm:inset-8 md:inset-10 border border-white/5 rounded-full" />
+          <div className="absolute inset-4 md:inset-8 lg:inset-10 border border-white/5 rounded-full" />
           
-          <div className="relative w-60 h-60 sm:w-72 sm:h-72 md:w-80 md:h-80 bg-transparent flex items-center justify-center">
+          <div className="relative w-full h-full max-w-[220px] md:max-w-[300px] lg:max-w-[340px] max-h-[220px] md:max-h-[300px] lg:max-h-[340px] bg-transparent flex items-center justify-center">
             <motion.div 
               animate={{ rotate: 360 }}
               transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-              className="absolute w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 border-2 border-blue-500/30 flex items-center justify-center bg-blue-500/5 will-change-transform"
+              className="absolute w-24 md:w-36 lg:w-44 h-24 md:h-36 lg:h-44 border-2 border-blue-500/30 flex items-center justify-center bg-blue-500/5 will-change-transform"
               style={{ clipPath: "polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)", transform: 'translateZ(0)' }}
             >
               <div className="w-full h-full bg-gradient-to-t from-blue-500/20 to-transparent" />
             </motion.div>
 
             <div className="absolute flex flex-col items-center z-10">
-               <span className="text-6xl sm:text-7xl md:text-8xl font-black text-white/10 leading-none">05</span>
-               <span className="text-[8px] sm:text-[9px] md:text-[10px] font-bold text-blue-500 tracking-[0.4em] sm:tracking-[0.45em] md:tracking-[0.5em] uppercase">Especialistas</span>
+               <span className="text-5xl md:text-7xl lg:text-8xl font-black text-white/10 leading-none">05</span>
+               <span className="text-[7px] md:text-[9px] lg:text-[10px] font-bold text-blue-500 tracking-[0.3em] md:tracking-[0.45em] lg:tracking-[0.5em] uppercase">Especialistas</span>
             </div>
 
             <motion.div 
