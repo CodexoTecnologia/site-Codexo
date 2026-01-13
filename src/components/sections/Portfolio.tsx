@@ -26,33 +26,33 @@ export default function Portfolio() {
   ];
 
   return (
-    <section id="portfolio" className="relative py-24 px-6 bg-codexo-dark border-t border-white/5">
+    <section id="portfolio" className="relative py-16 sm:py-18 md:py-20 lg:py-22 xl:py-24 px-4 sm:px-6 md:px-8 lg:px-6 bg-codexo-dark border-t border-white/5">
       <div className="container mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-          <div className="space-y-4">
-            <span className="text-codexo-primary font-black text-[10px] tracking-[0.5em] uppercase">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-10 sm:mb-12 md:mb-14 lg:mb-16 gap-4 sm:gap-5 md:gap-6">
+          <div className="space-y-2 sm:space-y-3 md:space-y-4">
+            <span className="text-codexo-primary font-black text-[8px] sm:text-[9px] md:text-[10px] tracking-[0.4em] sm:tracking-[0.45em] md:tracking-[0.5em] uppercase">
               Cases de Sucesso //
             </span>
-            <h3 className="text-4xl md:text-6xl font-black text-white leading-none uppercase tracking-tighter">
+            <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white leading-none uppercase tracking-tighter">
               NOSSAS <span className="outline-text text-white/20 italic">SOLUÇÕES</span>
             </h3>
           </div>
-          <p className="text-slate-600 text-[9px] font-bold uppercase tracking-[0.3em] max-w-[250px] border-l border-white/10 pl-4">
+          <p className="text-slate-600 text-[8px] sm:text-[8.5px] md:text-[9px] font-bold uppercase tracking-[0.25em] sm:tracking-[0.275em] md:tracking-[0.3em] max-w-[200px] sm:max-w-[225px] md:max-w-[250px] border-l border-white/10 pl-3 sm:pl-3.5 md:pl-4">
             Sistemas de alta performance desenhados para gerar valor real e crescimento escalável.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
           {projetos.map((proj, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0.8 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              className={`group relative bg-white/[0.01] border border-white/5 overflow-hidden rounded-xl transition-all duration-500 ${i === 2 ? 'grayscale opacity-40' : 'hover:border-codexo-primary/30'}`}
+              className={`group relative bg-white/[0.01] border border-white/5 overflow-hidden rounded-lg sm:rounded-lg md:rounded-xl transition-all duration-500 ${i === 2 ? 'grayscale opacity-40' : 'hover:border-codexo-primary/30'}`}
             >
               {/* ÁREA DE VISUALIZAÇÃO TÉCNICA - ATUALIZADA PARA MOSTRAR IMAGEM NO INDEX 0 E 1 */}
-              <div className="relative h-64 bg-codexo-dark-light flex items-center justify-center overflow-hidden">
+              <div className="relative h-48 sm:h-56 md:h-60 lg:h-64 bg-codexo-dark-light flex items-center justify-center overflow-hidden">
                 {proj.image ? (
                   <>
                     <img 
@@ -71,34 +71,34 @@ export default function Portfolio() {
               </div>
 
               {/* CONTEÚDO DO CARD */}
-              <div className="p-8 relative z-20 space-y-4 bg-codexo-dark-light/80 backdrop-blur-sm h-full">
+              <div className="p-5 sm:p-6 md:p-7 lg:p-8 relative z-20 space-y-3 sm:space-y-3.5 md:space-y-4 bg-codexo-dark-light/80 backdrop-blur-sm h-full">
                 <div className="flex justify-between items-start">
                   <div>
-                    <span className="text-codexo-primary text-[9px] font-black tracking-[0.3em] uppercase">
+                    <span className="text-codexo-primary text-[7px] sm:text-[8px] md:text-[9px] font-black tracking-[0.25em] sm:tracking-[0.275em] md:tracking-[0.3em] uppercase">
                       {proj.category}
                     </span>
-                    <h4 className="text-xl font-black text-white mt-1 uppercase italic tracking-tight">
+                    <h4 className="text-lg sm:text-lg md:text-xl font-black text-white mt-1 uppercase italic tracking-tight">
                       {proj.title}
                     </h4>
                   </div>
                   <FaCode className="text-white/10" />
                 </div>
                 
-                <p className="text-slate-400 text-[11px] leading-relaxed min-h-[50px]">
+                <p className="text-slate-400 text-[10px] sm:text-[10.5px] md:text-[11px] leading-relaxed min-h-[40px] sm:min-h-[45px] md:min-h-[50px]">
                   {proj.desc || "Aguardando processamento de dados e finalização de protocolos de engenharia."}
                 </p>
 
-                <div className="flex flex-wrap gap-2 pt-2">
+                <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-1.5 sm:pt-2">
                   {proj.tags?.map(tag => (
-                    <span key={tag} className="text-[8px] border border-white/10 px-2 py-1 text-slate-500 font-bold uppercase tracking-widest">
+                    <span key={tag} className="text-[7px] sm:text-[7.5px] md:text-[8px] border border-white/10 px-1.5 sm:px-2 py-0.5 sm:py-1 text-slate-500 font-bold uppercase tracking-widest">
                       {tag}
                     </span>
                   ))}
                 </div>
 
-                <div className="flex items-center gap-3 pt-4 border-t border-white/5 text-slate-600">
-                  <FaLock size={8} />
-                  <span className="text-[8px] font-black uppercase tracking-widest">
+                <div className="flex items-center gap-2 sm:gap-2.5 md:gap-3 pt-3 sm:pt-3.5 md:pt-4 border-t border-white/5 text-slate-600">
+                  <FaLock size={7} className="sm:w-[7.5px] sm:h-[7.5px] md:w-2 md:h-2" />
+                  <span className="text-[7px] sm:text-[7.5px] md:text-[8px] font-black uppercase tracking-widest">
                     Status: {proj.status}
                   </span>
                 </div>
