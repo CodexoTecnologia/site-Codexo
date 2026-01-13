@@ -1,26 +1,94 @@
 @import "tailwindcss";
 
+@theme {
+  /* Paleta Extraída do seu styles.css */
+  --color-codexo-primary: #667eea;
+  --color-codexo-secondary: #764ba2;
+  --color-codexo-accent: #f093fb;
+  --color-codexo-dark: #0f0f1e;
+  --color-codexo-dark-light: #1a1a2e;
+  
+  /* Gradiente oficial como variável */
+  --background-codexo-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-20px) scale(1.05); }
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  background-color: var(--color-codexo-dark);
+  color: white;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Utilitário para o Pentágono */
+.clip-pentagon {
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background: var(--color-codexo-primary);
+  color: white;
+}
+
+@layer utilities {
+  .clip-pentagon {
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+
+.bg-codexo-dark {
+  background-image: linear-gradient(rgba(102, 126, 234, 0.03) 1px, transparent 1px), 
+                    linear-gradient(90deg, rgba(102, 126, 234, 0.03) 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+/* Customização de Cores Phone Input */
+.codexo-phone-input {
+  display: flex;
+  align-items: center;
+  background: #1a1a2e !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  padding: 0 1rem;
+  height: 52px;
+}
+
+.codexo-phone-input:focus-within {
+  border-color: #667eea !important;
+}
+
+/* Ajuste das Cores da Lista de Países */
+.PhoneInputCountrySelect {
+  background-color: #0f0f1e !important; /* Cor dark da Codexo */
+  color: white !important;
+  cursor: pointer;
+  padding: 5px;
+}
+
+/* Remove o fundo cinza/branco do seletor nativo */
+.PhoneInputCountry {
+  background: transparent !important;
+}
+
+.PhoneInputInput {
+  background: transparent !important;
+  border: none !important;
+  color: white !important;
+  font-size: 0.75rem !important;
+  padding: 1rem !important;
+  outline: none !important;
+  width: 100%;
+}
+
+/* Estilização para as opções dentro do select (Dropdown) */
+select option {
+  background-color: #0f0f1e !important;
+  color: white !important;
 }
