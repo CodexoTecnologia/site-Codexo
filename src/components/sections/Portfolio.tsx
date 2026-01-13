@@ -1,30 +1,28 @@
 "use client";
 import { motion } from "framer-motion";
-import { FaExternalLinkAlt, FaCode } from "react-icons/fa";
+import { FaCode, FaLock } from "react-icons/fa";
 
 export default function Portfolio() {
   const projetos = [
     {
-      title: "Gestão Funcional",
-      category: "Controle & Dados",
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
-      desc: "Painéis administrativos complexos para centralização de dados e tomada de decisão estratégica.",
-      tags: ["BI", "SaaS"]
+      id: "01",
+      title: "Elohim Verduras",
+      category: "Sistemas Web",
+      image: "/prints/elohim-verduras.png", 
+      desc: "Plataforma de presença digital e catálogo otimizado para o setor de hortifruti, focada em conversão direta.",
+      tags: ["Performance", "UI/UX", "Conversão"],
+      status: "Documentando"
     },
     {
-      title: "Automação Core",
-      category: "Eficiência",
-      image: "https://images.unsplash.com/photo-1518433278981-2a2dfb3da321?w=800&q=80",
-      desc: "Otimização de fluxos de trabalho operacionais para maximizar a eficiência das operações.",
-      tags: ["Processos", "AI"]
+      id: "02",
+      title: "SeuBairro",
+      category: "Plataforma Social",
+      image: "/prints/seubairro.png", 
+      desc: "Ecossistema digital para fomento da economia local, conectando moradores para troca de serviços e comércio de bairro.",
+      tags: ["Economia Local", "SaaS", "Conectividade"],
+      status: "Em Desenvolvimento"
     },
-    {
-      title: "Arquitetura Web",
-      category: "Performance",
-      image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80",
-      desc: "Estruturas digitais sólidas e escaláveis otimizadas para converter visitantes em clientes.",
-      tags: ["Web", "Escalabilidade"]
-    }
+    { id: "03", title: "Em Breve!", category: "???", status: "Encrypted" }
   ];
 
   return (
@@ -36,11 +34,11 @@ export default function Portfolio() {
               Cases de Sucesso //
             </span>
             <h3 className="text-4xl md:text-6xl font-black text-white leading-none uppercase tracking-tighter">
-              PROJETOS <span className="outline-text">REALIZADOS</span>
+              NOSSAS <span className="outline-text text-white/20 italic">SOLUÇÕES</span>
             </h3>
           </div>
-          <p className="text-slate-500 text-[9px] font-bold uppercase tracking-[0.3em] max-w-[250px]">
-            Sistemas de alta performance que simplificam processos e geram valor real.
+          <p className="text-slate-600 text-[9px] font-bold uppercase tracking-[0.3em] max-w-[250px] border-l border-white/10 pl-4">
+            Sistemas de alta performance desenhados para gerar valor real e crescimento escalável.
           </p>
         </div>
 
@@ -48,46 +46,62 @@ export default function Portfolio() {
           {projetos.map((proj, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0.8 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              className="group relative bg-codexo-dark-light border border-white/5 overflow-hidden rounded-xl"
+              className={`group relative bg-white/[0.01] border border-white/5 overflow-hidden rounded-xl transition-all duration-500 ${i === 2 ? 'grayscale opacity-40' : 'hover:border-codexo-primary/30'}`}
             >
-              <div className="absolute inset-0 bg-gradient-to-t from-codexo-dark to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
-              
-              <div className="relative h-56 overflow-hidden">
-                <img 
-                  src={proj.image} 
-                  alt={proj.title} 
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-                />
+              {/* ÁREA DE VISUALIZAÇÃO TÉCNICA - ATUALIZADA PARA MOSTRAR IMAGEM NO INDEX 0 E 1 */}
+              <div className="relative h-64 bg-codexo-dark-light flex items-center justify-center overflow-hidden">
+                {proj.image ? (
+                  <>
+                    <img 
+                      src={proj.image} 
+                      alt={proj.title} 
+                      className="w-full h-full object-cover opacity-50 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 grayscale group-hover:grayscale-0" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-codexo-dark via-transparent to-transparent" />
+                  </>
+                ) : (
+                  <>
+                    <div className="absolute inset-0 bg-grid-white/[0.01] bg-[size:20px_20px]" />
+                    <span className="text-5xl font-black text-white/5 italic">?</span>
+                  </>
+                )}
               </div>
 
-              <div className="p-8 relative z-20 space-y-4 bg-codexo-dark-light">
-                <div>
-                  <span className="text-codexo-primary text-[9px] font-black tracking-[0.3em] uppercase">
-                    {proj.category}
-                  </span>
-                  <h4 className="text-xl font-black text-white mt-1 uppercase italic tracking-tight">
-                    {proj.title}
-                  </h4>
+              {/* CONTEÚDO DO CARD */}
+              <div className="p-8 relative z-20 space-y-4 bg-codexo-dark-light/80 backdrop-blur-sm h-full">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <span className="text-codexo-primary text-[9px] font-black tracking-[0.3em] uppercase">
+                      {proj.category}
+                    </span>
+                    <h4 className="text-xl font-black text-white mt-1 uppercase italic tracking-tight">
+                      {proj.title}
+                    </h4>
+                  </div>
+                  <FaCode className="text-white/10" />
                 </div>
                 
-                <p className="text-slate-400 text-xs leading-relaxed">
-                  {proj.desc}
+                <p className="text-slate-400 text-[11px] leading-relaxed min-h-[50px]">
+                  {proj.desc || "Aguardando processamento de dados e finalização de protocolos de engenharia."}
                 </p>
 
                 <div className="flex flex-wrap gap-2 pt-2">
-                  {proj.tags.map(tag => (
-                    <span key={tag} className="text-[8px] border border-white/10 px-2 py-1 text-slate-600 font-bold uppercase">
+                  {proj.tags?.map(tag => (
+                    <span key={tag} className="text-[8px] border border-white/10 px-2 py-1 text-slate-500 font-bold uppercase tracking-widest">
                       {tag}
                     </span>
                   ))}
                 </div>
 
-                <a href="#" className="inline-flex items-center gap-2 text-[9px] font-black text-white uppercase tracking-widest pt-4 border-t border-white/5 w-full hover:text-codexo-primary transition-colors">
-                  Analisar Case <FaExternalLinkAlt size={7} />
-                </a>
+                <div className="flex items-center gap-3 pt-4 border-t border-white/5 text-slate-600">
+                  <FaLock size={8} />
+                  <span className="text-[8px] font-black uppercase tracking-widest">
+                    Status: {proj.status}
+                  </span>
+                </div>
               </div>
             </motion.div>
           ))}
