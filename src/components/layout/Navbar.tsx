@@ -36,7 +36,7 @@ export default function Navbar() {
         <motion.div
           animate={{
             backgroundColor: isScrolled ? "rgba(10, 10, 20, 0.95)" : "rgba(255, 255, 255, 0.03)",
-            backdropBlur: "24px",
+            backdropFilter: isScrolled ? "blur(24px)" : "blur(0px)",
           }}
           className="absolute inset-0 z-0 backdrop-blur-3xl"
         />
