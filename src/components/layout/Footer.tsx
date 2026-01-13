@@ -38,7 +38,7 @@ export default function Footer() {
               className="opacity-90 sm:w-[160px] sm:h-[45px]" 
             />
             <p className="max-w-[280px] sm:max-w-sm md:max-w-md text-slate-400 text-xs sm:text-sm leading-relaxed border-l-2 border-codexo-primary pl-4 sm:pl-5 md:pl-6 italic">
-              "Transformamos a complexidade tecnológica em sistemas funcionais de alta performance, escalando o sucesso de nossos parceiros."
+              Transformamos a complexidade tecnológica em sistemas funcionais de alta performance, escalando o sucesso de nossos parceiros.
             </p>
             
             <div className="flex gap-3 sm:gap-4 pt-3 sm:pt-4">
