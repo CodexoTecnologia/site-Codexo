@@ -15,6 +15,15 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Fecha menu no ESC
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsMobileMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
   const navLinks = [
     { name: "Início", href: "#inicio" },
     { name: "Sobre", href: "#sobre" },
@@ -106,41 +115,52 @@ export default function Navbar() {
       {/* MENU MOBILE */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed top-[70px] sm:top-[80px] left-0 right-0 z-[99] md:hidden mx-3 sm:mx-4"
-          >
-            <div className="bg-codexo-dark-light/98 backdrop-blur-2xl border border-white/10 rounded-xl shadow-2xl overflow-hidden">
-              <nav className="p-4">
-                <ul className="space-y-1">
-                  {navLinks.map((link, index) => (
-                    <motion.li
-                      key={link.name}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                    >
-                      <Link 
-                        href={link.href}
-                        onClick={closeMobileMenu}
-                        className="block px-4 py-3 text-[10px] uppercase tracking-[0.2em] font-bold text-slate-400 hover:text-white hover:bg-white/5 transition-all rounded-lg"
+          <>
+            {/* Overlay para fechar ao clicar fora */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.3 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[98] bg-black"
+              onClick={closeMobileMenu}
+            />
+
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="fixed top-[70px] sm:top-[80px] left-0 right-0 z-[99] md:hidden mx-3 sm:mx-4"
+            >
+              <div className="bg-codexo-dark-light/98 backdrop-blur-2xl border border-white/10 rounded-xl shadow-2xl overflow-hidden">
+                <nav className="p-4">
+                  <ul className="space-y-1">
+                    {navLinks.map((link, index) => (
+                      <motion.li
+                        key={link.name}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1 }}
                       >
-                        {link.name}
-                      </Link>
-                    </motion.li>
-                  ))}
-                </ul>
-                
-                <Link href="#contato" onClick={closeMobileMenu} className="sm:hidden block mt-4">
-                  <button className="w-full px-6 py-3 bg-codexo-primary text-white font-black text-[9px] tracking-[0.2em] uppercase rounded-full border border-white/20">
-                    Contato
-                  </button>
-                </Link>
-              </nav>
-            </div>
-          </motion.div>
+                        <Link 
+                          href={link.href}
+                          onClick={closeMobileMenu}
+                          className="block px-4 py-3 text-[10px] uppercase tracking-[0.2em] font-bold text-slate-400 hover:text-white hover:bg-white/5 transition-all rounded-lg"
+                        >
+                          {link.name}
+                        </Link>
+                      </motion.li>
+                    ))}
+                  </ul>
+                  
+                  <Link href="#contato" onClick={closeMobileMenu} className="sm:hidden block mt-4">
+                    <button className="w-full px-6 py-3 bg-codexo-primary text-white font-black text-[9px] tracking-[0.2em] uppercase rounded-full border border-white/20">
+                      Contato
+                    </button>
+                  </Link>
+                </nav>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>

@@ -44,76 +44,33 @@ export default function Culture() {
             </AnimatePresence>
           </div>
 
-          {/* 5 VÉRTICES NAS PONTAS - AFASTADOS DO POLÍGONO CENTRAL */}
+          {/* 5 VÉRTICES NAS PONTAS - FIXOS E AFASTADOS */}
           {[0, 1, 2, 3, 4].map((i) => {
-            // Ângulos do pentágono: começa no topo (-90°) e vai de 72 em 72 graus
             const angle = -90 + (i * 72);
-            const radians = (angle * Math.PI) / 180;
-            
-            // Posições para cada breakpoint (mobile / tablet / desktop)
-            const radiusMobile = 120;
-            const radiusMd = 170;
-            const radiusLg = 220;
-            
+            const sin = Math.sin((angle * Math.PI) / 180).toFixed(4);
+            const cos = Math.cos((angle * Math.PI) / 180).toFixed(4);
+
             return (
               <motion.div
                 key={`vertex-${i}`}
-                className="absolute cursor-pointer z-30"
+                className="absolute cursor-pointer z-30 [--r:140px] md:[--r:190px] lg:[--r:230px]"
                 style={{
-                  top: '50%',
-                  left: '50%',
+                  top: `calc(50% + (var(--r) * ${sin}))`,
+                  left: `calc(50% + (var(--r) * ${cos}))`,
+                  transform: "translate(-50%, -50%)",
                 }}
-                whileHover={{ scale: 1.1 }}
                 onMouseEnter={() => setActivePilar(i)}
                 onClick={() => setActivePilar(i)}
               >
-                {/* Container com posicionamento responsivo via CSS */}
-                <motion.div 
-                  animate={{ 
+                <motion.div
+                  animate={{
                     backgroundColor: activePilar === i ? "#667eea" : "#0a0a14",
                     borderColor: activePilar === i ? "#ffffff" : "#667eea",
-                    boxShadow: activePilar === i ? "0 0 25px rgba(102, 126, 234, 0.7)" : "0 0 10px rgba(102, 126, 234, 0.2)"
+                    boxShadow: activePilar === i ? "0 0 25px rgba(102, 126, 234, 0.7)" : "0 0 10px rgba(102, 126, 234, 0.2)",
                   }}
                   className="w-9 md:w-11 lg:w-14 h-9 md:h-11 lg:h-14 clip-pentagon flex items-center justify-center border-2 transition-colors duration-300"
-                  style={{
-                    transform: `translate(${Math.cos(radians) * radiusMobile - 18}px, ${Math.sin(radians) * radiusMobile - 18}px)`,
-                  }}
                 >
                   <span className={`font-black text-[10px] md:text-xs lg:text-sm ${activePilar === i ? "text-white" : "text-codexo-primary"}`}>
-                    0{i + 1}
-                  </span>
-                </motion.div>
-                
-                {/* Versão tablet - sobrepõe em md+ */}
-                <motion.div 
-                  animate={{ 
-                    backgroundColor: activePilar === i ? "#667eea" : "#0a0a14",
-                    borderColor: activePilar === i ? "#ffffff" : "#667eea",
-                    boxShadow: activePilar === i ? "0 0 25px rgba(102, 126, 234, 0.7)" : "0 0 10px rgba(102, 126, 234, 0.2)"
-                  }}
-                  className="hidden md:flex lg:hidden absolute top-0 left-0 w-11 h-11 clip-pentagon items-center justify-center border-2 transition-colors duration-300"
-                  style={{
-                    transform: `translate(${Math.cos(radians) * radiusMd - 22}px, ${Math.sin(radians) * radiusMd - 22}px)`,
-                  }}
-                >
-                  <span className={`font-black text-xs ${activePilar === i ? "text-white" : "text-codexo-primary"}`}>
-                    0{i + 1}
-                  </span>
-                </motion.div>
-                
-                {/* Versão desktop - sobrepõe em lg+ */}
-                <motion.div 
-                  animate={{ 
-                    backgroundColor: activePilar === i ? "#667eea" : "#0a0a14",
-                    borderColor: activePilar === i ? "#ffffff" : "#667eea",
-                    boxShadow: activePilar === i ? "0 0 25px rgba(102, 126, 234, 0.7)" : "0 0 10px rgba(102, 126, 234, 0.2)"
-                  }}
-                  className="hidden lg:flex absolute top-0 left-0 w-14 h-14 clip-pentagon items-center justify-center border-2 transition-colors duration-300"
-                  style={{
-                    transform: `translate(${Math.cos(radians) * radiusLg - 28}px, ${Math.sin(radians) * radiusLg - 28}px)`,
-                  }}
-                >
-                  <span className={`font-black text-sm ${activePilar === i ? "text-white" : "text-codexo-primary"}`}>
                     0{i + 1}
                   </span>
                 </motion.div>

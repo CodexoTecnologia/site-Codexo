@@ -39,7 +39,7 @@ export default function Contact() {
           
           <div className="space-y-4 sm:space-y-5 md:space-y-6 lg:space-y-8">
             <p className="text-slate-300 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed max-w-[280px] sm:max-w-xs md:max-w-sm lg:max-w-md italic border-l-2 border-codexo-primary pl-3 sm:pl-4 md:pl-5 lg:pl-6">
-              "Pronto para transformar sua ideia em realidade digital com engenharia de elite?"
+              Pronto para transformar sua ideia em realidade digital com engenharia de elite?
             </p>
             <div className="p-4 sm:p-5 md:p-6 lg:p-7 xl:p-8 bg-white/[0.02] border border-white/5 rounded-xl sm:rounded-xl md:rounded-2xl space-y-2 sm:space-y-2.5 md:space-y-3 lg:space-y-3.5 xl:space-y-4 shadow-2xl relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 bg-codexo-primary/5 blur-[35px] sm:blur-[40px] md:blur-[45px] lg:blur-[50px] group-hover:bg-codexo-primary/10 transition-colors" />
@@ -68,7 +68,7 @@ export default function Contact() {
 
               <div className="space-y-1.5 sm:space-y-2">
                 <label className="text-[7px] sm:text-[8px] md:text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1 sm:ml-1.5 md:ml-2">
-                  Telefone {!isPhoneValid && <span className="text-red-500 ml-2 animate-pulse text-[6px] sm:text-[7px]">// FORMATO INVÁLIDO</span>}
+                  Telefone {!isPhoneValid && <span className="text-red-500 ml-2 animate-pulse text-[6px] sm:text-[7px]"> FORMATO INVÁLIDO</span>}
                 </label>
                 <div className={`codexo-phone-wrapper ${!isPhoneValid ? 'border-red-500/50' : 'border-white/10'}`}>
                   <PhoneInput
@@ -79,6 +79,7 @@ export default function Contact() {
                       setPhoneValue(val);
                       if (val) setIsPhoneValid(isValidPhoneNumber(val));
                     }}
+                    countrySelectProps={{ className: "codexo-country-select" }}
                     className="codexo-phone-input"
                     placeholder="Número de telefone"
                   />
@@ -126,6 +127,76 @@ export default function Contact() {
           </form>
         </motion.div>
       </div>
+
+      {/* Ajustes globais para responsividade do seletor de país do telefone */}
+      <style jsx global>{`
+        .codexo-phone-wrapper {
+          @apply relative w-full bg-codexo-dark-light border p-2.5 sm:p-3 md:p-3.5 lg:p-4 rounded-lg sm:rounded-lg md:rounded-xl flex items-center gap-2;
+        }
+        .codexo-phone-wrapper .PhoneInput {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .codexo-phone-wrapper .PhoneInputCountry {
+          display: flex;
+          align-items: center;
+        }
+        .codexo-phone-wrapper .PhoneInputCountrySelect {
+          width: auto;
+        }
+        .codexo-phone-wrapper select.codexo-country-select {
+          width: 100%;
+          max-width: 110px;
+          background: transparent;
+          color: #fff;
+          font-size: 12px;
+          border: none;
+          outline: none;
+        }
+        .codexo-phone-wrapper .PhoneInputInput {
+          flex: 1;
+          background: transparent;
+          border: none;
+          outline: none;
+          color: #fff;
+          font-size: 13px;
+        }
+        /* Dropdown de países: limitar altura e permitir scroll em telas pequenas */
+        .codexo-phone-wrapper select.codexo-country-select option {
+          font-size: 12px;
+        }
+        /* Força limite de altura do dropdown (browsers baseados em WebKit/Chromium) */
+        select.codexo-country-select {
+          max-height: 50vh !important;
+          overflow-y: auto !important;
+        }
+        @media (max-width: 768px) {
+          .codexo-phone-wrapper select.codexo-country-select {
+            max-width: 90px;
+            font-size: 10px;
+          }
+          .codexo-phone-wrapper select.codexo-country-select option {
+            font-size: 11px;
+          }
+          select.codexo-country-select {
+            max-height: 45vh !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .codexo-phone-wrapper select.codexo-country-select {
+            max-width: 78px;
+            font-size: 9px;
+          }
+          .codexo-phone-wrapper select.codexo-country-select option {
+            font-size: 10px;
+          }
+          select.codexo-country-select {
+            max-height: 40vh !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }

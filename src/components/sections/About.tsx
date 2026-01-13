@@ -21,6 +21,7 @@ export default function About() {
   const [selected, setSelected] = useState<IconKey>("Parceria");
   const [isScanning, setIsScanning] = useState(false);
   const [particles, setParticles] = useState(generateParticles(20));
+  const [isMobile, setIsMobile] = useState(false);
   const buttonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
   const iconRef = useRef<HTMLDivElement | null>(null);
 
@@ -54,6 +55,13 @@ export default function About() {
 
     return () => clearInterval(interval);
   }, [selected, triggerChange]);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(typeof window !== "undefined" && window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const handleManualClick = (valor: IconKey) => {
     if (isScanning || selected === valor) return;
@@ -112,7 +120,7 @@ export default function About() {
           </div>
 
           {/* === ÁREA DO SCAN === */}
-          <div className="flex-1 flex items-center justify-center min-h-[200px] md:min-h-[280px] lg:min-h-[320px] relative">
+          <div className="flex-1 flex items-center justify-center min-h-[240px] md:min-h-[300px] lg:min-h-[320px] relative">
 
             {/* Área do Scan */}
             <div ref={iconRef} className="relative w-full max-w-[180px] md:max-w-[250px] lg:max-w-[300px] h-[180px] md:h-[250px] lg:h-[300px] flex items-center justify-center">
@@ -122,9 +130,9 @@ export default function About() {
               
               {/* Círculo de Scan */}
               <motion.div
-                animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.1, 0.3] }}
+                animate={{ scale: [1, 1.2, 1], opacity: [0.35, 0.15, 0.35] }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute w-24 md:w-36 lg:w-44 h-24 md:h-36 lg:h-44 border border-blue-500/30 rounded-full will-change-transform pointer-events-none"
+                className="absolute w-28 md:w-40 lg:w-48 h-28 md:h-40 lg:h-48 border border-blue-400/35 rounded-full will-change-transform pointer-events-none"
                 style={{ transform: 'translateZ(0)' }}
               />
 
@@ -201,23 +209,23 @@ export default function About() {
         </motion.div>
 
         {/* === COLUNA DIREITA: DISPLAY 05 === */}
-        <div className="relative aspect-square flex items-center justify-center mt-8 lg:mt-0 max-w-[260px] md:max-w-[340px] lg:max-w-none mx-auto lg:mx-0">
+        <div className="relative aspect-square flex items-center justify-center mt-12 md:mt-14 lg:mt-0 max-w-[300px] md:max-w-[400px] lg:max-w-none mx-auto lg:mx-0">
           <div className="absolute inset-0 border border-white/5 rounded-full" />
           <div className="absolute inset-4 md:inset-8 lg:inset-10 border border-white/5 rounded-full" />
           
-          <div className="relative w-full h-full max-w-[220px] md:max-w-[300px] lg:max-w-[340px] max-h-[220px] md:max-h-[300px] lg:max-h-[340px] bg-transparent flex items-center justify-center">
+          <div className="relative w-full h-full max-w-[280px] md:max-w-[380px] lg:max-w-[450px] max-h-[280px] md:max-h-[380px] lg:max-h-[450px] bg-transparent flex items-center justify-center">
             <motion.div 
               animate={{ rotate: 360 }}
               transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-              className="absolute w-24 md:w-36 lg:w-44 h-24 md:h-36 lg:h-44 border-2 border-blue-500/30 flex items-center justify-center bg-blue-500/5 will-change-transform"
+              className="absolute w-40 md:w-56 lg:w-72 h-40 md:h-56 lg:h-72 border-2 border-blue-500/30 flex items-center justify-center bg-blue-500/5 will-change-transform"
               style={{ clipPath: "polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)", transform: 'translateZ(0)' }}
             >
               <div className="w-full h-full bg-gradient-to-t from-blue-500/20 to-transparent" />
             </motion.div>
 
             <div className="absolute flex flex-col items-center z-10">
-               <span className="text-5xl md:text-7xl lg:text-8xl font-black text-white/10 leading-none">05</span>
-               <span className="text-[7px] md:text-[9px] lg:text-[10px] font-bold text-blue-500 tracking-[0.3em] md:tracking-[0.45em] lg:tracking-[0.5em] uppercase">Especialistas</span>
+               <span className="text-6xl md:text-8xl lg:text-9xl font-black text-white/10 leading-none">05</span>
+               <span className="text-[8px] md:text-[10px] lg:text-[12px] font-bold text-blue-500 tracking-[0.3em] md:tracking-[0.45em] lg:tracking-[0.5em] uppercase">Especialistas</span>
             </div>
 
             <motion.div 

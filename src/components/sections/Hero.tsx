@@ -78,7 +78,7 @@ export default function Hero() {
           </Link>
         </div>
 
-        <p className="text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] text-slate-500 font-bold tracking-[0.25em] sm:tracking-[0.3em] md:tracking-[0.35em] lg:tracking-[0.4em] uppercase pb-4 sm:pb-6 md:pb-8 lg:pb-10 px-2">
+        <p className="text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] text-slate-500 font-bold tracking-[0.25em] sm:tracking-[0.3em] md:tracking-[0.35em] lg:tracking-[0.4em] uppercase px-2">
           Escalando o sucesso através da tecnologia de alta performance
         </p>
       </motion.div>
@@ -87,12 +87,11 @@ export default function Hero() {
       <motion.div 
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
-        className="absolute bottom-4 sm:bottom-6 md:bottom-8 lg:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 sm:gap-1.5 md:gap-2"
+        className="mt-8 md:mt-12 lg:mt-16 flex flex-col items-center gap-1 md:gap-2 pb-6 md:pb-10"
       >
-        <span className="text-[7px] sm:text-[8px] md:text-[9px] text-slate-600 font-black uppercase tracking-[0.2em] md:tracking-[0.3em]">Scroll</span>
-        <div className="w-[1px] h-6 sm:h-8 md:h-10 lg:h-12 bg-gradient-to-b from-codexo-primary to-transparent opacity-50" />
+        <span className="text-[7px] md:text-[9px] text-slate-600 font-black uppercase tracking-[0.2em] md:tracking-[0.3em]">Scroll</span>
+        <div className="w-[1px] h-6 md:h-10 lg:h-12 bg-gradient-to-b from-codexo-primary to-transparent opacity-50" />
       </motion.div>
     </section>
-    
   );
 }
