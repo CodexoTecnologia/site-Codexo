@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   title: "Codexo Tecnologia",
   description: "Transformando ideias em realidade digital com alta performance",
   icons: {
-    icon: "/logo_codexo_branca.svg",
+    icon: "/logo_codexo_roxo_principal.svg",
   }
 };
 
