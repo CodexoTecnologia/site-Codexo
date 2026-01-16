@@ -1,240 +1,209 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Handshake, Eye, Zap, Heart, ShieldCheck } from 'lucide-react';
 
 type IconKey = "Parceria" | "Transparência" | "Performance" | "Empatia" | "Segurança";
 
-// Gerar partículas aleatórias
 const generateParticles = (count: number) => {
   return Array.from({ length: count }, (_, i) => ({
     id: i,
     angle: (Math.random() * 360),
-    distance: Math.random() * 200 + 100,
-    size: Math.random() * 4 + 2,
-    duration: Math.random() * 1.5 + 1,
-    delay: Math.random() * 0.3,
+    distance: Math.random() * 70 + 40,
+    size: Math.random() * 2 + 1,
+    duration: Math.random() * 0.5 + 0.4,
   }));
 };
 
 export default function About() {
+  const iconKeys: IconKey[] = ["Parceria", "Transparência", "Performance", "Empatia", "Segurança"];
   const [selected, setSelected] = useState<IconKey>("Parceria");
   const [isScanning, setIsScanning] = useState(false);
-  const [particles, setParticles] = useState(generateParticles(20));
-  const [isMobile, setIsMobile] = useState(false);
-  const buttonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
-  const iconRef = useRef<HTMLDivElement | null>(null);
+  const [particles, setParticles] = useState<any[]>([]);
 
-  const iconKeys: IconKey[] = ["Parceria", "Transparência", "Performance", "Empatia", "Segurança"];
-
-  const icons: Record<IconKey, React.ReactNode> = {
-    Parceria: <Handshake size={80} />,
-    Transparência: <Eye size={80} />,
-    Performance: <Zap size={80} />,
-    Empatia: <Heart size={80} />,
-    Segurança: <ShieldCheck size={80} />,
+  const pilares = {
+    Parceria: { 
+        icon: <Handshake className="w-full h-full" />, 
+        title: "Sócios do seu Negócio",
+        desc: "Não somos apenas fornecedores de código. Atuamos como braço direito estratégico, focados no ROI e no crescimento sustentável da sua operação." 
+    },
+    Transparência: { 
+        icon: <Eye className="w-full h-full" />, 
+        title: "Clareza em Cada Etapa",
+        desc: "Eliminamos a 'caixa preta' do desenvolvimento. Você acompanha o progresso com relatórios claros, prazos realistas e comunicação direta." 
+    },
+    Performance: { 
+        icon: <Zap className="w-full h-full" />, 
+        title: "Engenharia de Elite",
+        desc: "Sistemas otimizados para velocidade e conversão. Entregamos aplicações leves que rankeiam melhor no Google e retêm mais usuários." 
+    },
+    Empatia: { 
+        icon: <Heart className="w-full h-full" />, 
+        title: "Foco no Usuário Final",
+        desc: "Traduzimos complexidade técnica em experiências intuitivas. Tecnologia deve servir às pessoas, facilitando a vida e não complicando." 
+    },
+    Segurança: { 
+        icon: <ShieldCheck className="w-full h-full" />, 
+        title: "Proteção de Dados",
+        desc: "Desenvolvimento pautado nas melhores práticas de segurança da informação, garantindo a integridade do seu negócio e dos seus clientes." 
+    },
   };
-
+  
   const triggerChange = useCallback((nextVal: IconKey) => {
+    if (nextVal === selected) return;
     setIsScanning(true);
-    setParticles(generateParticles(20)); // Regenerar partículas
-    setTimeout(() => {
-      setSelected(nextVal);
-    }, 350);
-    setTimeout(() => {
-      setIsScanning(false);
-    }, 800);
-  }, []);
+    setParticles(generateParticles(20));
+    setTimeout(() => setSelected(nextVal), 250);
+    setTimeout(() => setIsScanning(false), 750);
+  }, [selected]);
 
   useEffect(() => {
     const interval = setInterval(() => {
       const currentIndex = iconKeys.indexOf(selected);
       const nextIndex = (currentIndex + 1) % iconKeys.length;
       triggerChange(iconKeys[nextIndex]);
-    }, 4000); 
-
+    }, 8000);
     return () => clearInterval(interval);
   }, [selected, triggerChange]);
 
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(typeof window !== "undefined" && window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  const handleManualClick = (valor: IconKey) => {
-    if (isScanning || selected === valor) return;
-    triggerChange(valor);
-  };
-
   return (
-    <section id="sobre" className="relative pt-16 md:pt-24 lg:pt-28 pb-8 md:pb-16 lg:pb-20 px-4 md:px-8 container mx-auto">
-      {/* Background Grid Sutil */}
-      <div className="absolute inset-0 pointer-events-none" />
-
-      <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center z-10">
-        
-        {/* === COLUNA ESQUERDA === */}
-        <motion.div 
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
+    <section id="sobre" className="relative pt-4 sm:pt-8 md:pt-12 lg:pt-16 pb-6 sm:pb-10 px-4 sm:px-6 md:px-8 container mx-auto overflow-hidden">
+      
+      <div className="flex flex-col mb-4 sm:mb-6 md:mb-10 max-w-4xl">
+        <motion.span 
+          initial={{ opacity: 0, x: -20 }} 
+          whileInView={{ opacity: 1, x: 0 }} 
           viewport={{ once: true }}
-          className="flex flex-col h-full"
+          className="text-codexo-primary font-black text-[8px] sm:text-[9px] md:text-[10px] tracking-[0.4em] sm:tracking-[0.45em] md:tracking-[0.5em] uppercase mb-2 sm:mb-3"
         >
-          {/* Textos */}
-          <div className="space-y-2 md:space-y-3 mb-6 md:mb-8 lg:mb-10">
-            <span className="text-blue-500 font-black text-[8px] md:text-[10px] tracking-[0.4em] md:tracking-[0.5em] uppercase">
-              Sócio Estratégico //
-            </span>
-            <h3 className="text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white leading-tight uppercase">
-              Transformando Desafios em{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600 border-white/20" style={{ WebkitTextStroke: '1px rgba(255,255,255,0.2)' }}>
-                Valor Real
-              </span>
-            </h3>
-          </div>
+          Nossa Essência
+        </motion.span>
+        <motion.h3 
+          initial={{ opacity: 0, y: 20 }} 
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black tracking-tighter text-white uppercase italic"
+        >
+          Sobre a <span className="outline-text">Codexo</span>
+        </motion.h3>
+      </div>
 
-          {/* Menu de Botões */}
-          <div className="relative flex flex-wrap gap-2 md:gap-3 mb-8 md:mb-10 lg:mb-12">
-            {iconKeys.map((valor) => (
-              <button
-                ref={(el) => { buttonRefs.current[valor] = el; }}
-                key={valor}
-                onClick={() => handleManualClick(valor)}
-                className={`relative text-[8px] md:text-[10px] font-black uppercase tracking-widest px-3 md:px-5 py-2 md:py-3 border transition-all duration-300 ${
-                  selected === valor 
-                  ? "bg-blue-900/20 border-blue-500 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.4)]" 
-                  : "bg-white/5 border-white/10 text-slate-500 hover:border-white/30 hover:text-slate-300"
-                }`}
-              >
-                {valor}
-                {selected === valor && (
-                  <motion.div 
-                    layoutId="activeTabLine"
-                    className="absolute bottom-0 left-0 right-0 h-[2px] bg-blue-500 shadow-[0_0_10px_#3b82f6]" 
-                  />
-                )}
-              </button>
-            ))}
-          </div>
+      {/* AJUSTE: gap-0 no mobile para remover espaço entre grid items */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 sm:gap-6 lg:gap-12 items-center w-full relative z-10">
+        
+        <div className="flex flex-col order-1 lg:order-1">
+            <div className="flex flex-wrap gap-2 mb-4 sm:mb-6">
+                {iconKeys.map((key) => (
+                    <button
+                        key={key}
+                        onClick={() => !isScanning && triggerChange(key)}
+                        className={`relative px-3 py-1.5 sm:px-4 sm:py-2 rounded-md text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all duration-300 border ${
+                            selected === key 
+                            ? "bg-codexo-primary text-white border-codexo-primary shadow-lg shadow-codexo-primary/20 scale-105" 
+                            : "bg-white/[0.03] text-slate-500 border-white/5 hover:border-white/20 hover:text-white"
+                        }`}
+                    >
+                        {key}
+                    </button>
+                ))}
+            </div>
 
-          {/* === ÁREA DO SCAN === */}
-          <div className="flex-1 flex items-center justify-center min-h-[240px] md:min-h-[300px] lg:min-h-[320px] relative">
-
-            {/* Área do Scan */}
-            <div ref={iconRef} className="relative w-full max-w-[180px] md:max-w-[250px] lg:max-w-[300px] h-[180px] md:h-[250px] lg:h-[300px] flex items-center justify-center">
-              
-              {/* Grid Decorativo de Fundo */}
-              <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e3a8a10_1px,transparent_1px),linear-gradient(to_bottom,#1e3a8a10_1px,transparent_1px)] bg-[size:20px_20px]" />
-              
-              {/* Círculo de Scan */}
-              <motion.div
-                animate={{ scale: [1, 1.2, 1], opacity: [0.35, 0.15, 0.35] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute w-28 md:w-40 lg:w-48 h-28 md:h-40 lg:h-48 border border-blue-400/35 rounded-full will-change-transform pointer-events-none"
-                style={{ transform: 'translateZ(0)' }}
-              />
-
-              {/* Partículas Explodindo */}
-              <AnimatePresence mode="wait">
-                {isScanning && particles.map((particle) => {
-                  const polygonRadius = 80; // metade de w-40 (160px)
-                  const startX = Math.cos(particle.angle * Math.PI / 180) * polygonRadius * 0.5;
-                  const startY = Math.sin(particle.angle * Math.PI / 180) * polygonRadius * 0.5;
-                  
-                  return (
+            <div className="relative min-h-[140px] sm:min-h-[180px]">
+                <AnimatePresence mode="wait">
                     <motion.div
-                      key={`${selected}-${particle.id}`}
-                      initial={{ 
-                        x: startX, 
-                        y: startY, 
-                        opacity: 1,
-                        scale: 1
-                      }}
-                      animate={{ 
-                        x: Math.cos(particle.angle * Math.PI / 180) * particle.distance,
-                        y: Math.sin(particle.angle * Math.PI / 180) * particle.distance,
-                        opacity: 0,
-                        scale: 0
-                      }}
-                      transition={{ 
-                        duration: particle.duration,
-                        delay: particle.delay,
-                        ease: "easeOut"
-                      }}
-                      className="absolute bg-blue-400 rounded-full shadow-[0_0_10px_#3b82f6] z-[6] will-change-transform pointer-events-none"
-                      style={{ 
-                        width: particle.size,
-                        height: particle.size,
-                        left: '50%',
-                        top: '50%',
-                        transform: 'translateZ(0)'
-                      }}
+                        key={selected}
+                        initial={{ opacity: 0, x: 10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -10 }}
+                        transition={{ duration: 0.3 }}
+                        className="space-y-3 sm:space-y-4"
+                    >
+                        <h4 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white uppercase italic tracking-tight">
+                            {selected}
+                        </h4>
+                        
+                        <p className="text-slate-400 text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed font-medium border-l-2 border-codexo-primary/50 pl-4">
+                            {pilares[selected].desc}
+                        </p>
+
+                        <div className="pt-2 flex items-center gap-2 opacity-50">
+                            <div className="h-1 w-8 bg-codexo-primary rounded-full" />
+                            <span className="text-[7px] text-slate-500 uppercase tracking-[0.2em] font-bold">
+                                Pilar 0{iconKeys.indexOf(selected) + 1}
+                            </span>
+                        </div>
+                    </motion.div>
+                </AnimatePresence>
+            </div>
+        </div>
+
+        {/* AJUSTE: mt-[-20px] no mobile para puxar o pentágono para cima */}
+        <div className="order-2 lg:order-2 relative flex justify-center items-center h-[220px] sm:h-[300px] md:h-[360px] mt-[-20px] sm:mt-0 lg:mt-0">
+            <div className="absolute w-32 h-32 sm:w-56 sm:h-56 md:w-72 md:h-72 bg-codexo-primary/10 blur-[40px] rounded-full" />
+
+            <div className="absolute w-[180px] h-[180px] sm:w-[280px] sm:h-[280px] md:w-[340px] md:h-[340px] rounded-full border border-white/5 flex items-center justify-center">
+                <motion.div 
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+                    className="absolute inset-0 rounded-full border-t border-codexo-primary/20"
+                />
+            </div>
+            
+            <div className="absolute w-[130px] h-[130px] sm:w-[200px] sm:h-[200px] md:w-[240px] md:h-[240px] rounded-full border border-dashed border-white/10 flex items-center justify-center">
+                 <motion.div 
+                    animate={{ rotate: -360 }}
+                    transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                    className="absolute inset-0 rounded-full border-l border-white/10"
+                />
+            </div>
+
+            <AnimatePresence>
+                {isScanning && particles.map((p) => (
+                    <motion.div
+                        key={p.id}
+                        initial={{ opacity: 1, scale: 0 }}
+                        animate={{ 
+                            x: Math.cos(p.angle * (Math.PI / 180)) * p.distance, 
+                            y: Math.sin(p.angle * (Math.PI / 180)) * p.distance, 
+                            opacity: 0,
+                            scale: p.size 
+                        }}
+                        transition={{ duration: p.duration, ease: "easeOut" }}
+                        className="absolute w-1 h-1 bg-white rounded-full z-10"
                     />
-                  );
-                })}
-              </AnimatePresence>
-              
-              {/* Ícone com Animação */}
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={selected}
-                  initial={{ opacity: 0, scale: 0.5, filter: "blur(10px)" }}
-                  animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                  exit={{ opacity: 0, scale: 1.5, filter: "blur(10px)" }}
-                  transition={{ duration: 0.4 }}
-                  className="relative z-10 text-blue-400 drop-shadow-[0_0_20px_rgba(59,130,246,0.8)] will-change-transform [&>svg]:w-14 md:[&>svg]:w-20 lg:[&>svg]:w-[80px] [&>svg]:h-14 md:[&>svg]:h-20 lg:[&>svg]:h-[80px]"
-                  style={{ transform: 'translateZ(0)' }}
-                >
-                  {icons[selected]}
-                </motion.div>
-              </AnimatePresence>
+                ))}
+            </AnimatePresence>
 
-              {/* Laser de Scan Horizontal */}
-              <AnimatePresence>
-                {isScanning && (
-                  <motion.div 
-                    initial={{ top: "-10%", opacity: 0 }}
-                    animate={{ top: "110%", opacity: [0, 1, 1, 0] }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.8, ease: "easeInOut" }}
-                    className="absolute left-0 right-0 h-[2px] bg-blue-400 shadow-[0_0_30px_#3b82f6,0_0_15px_white] z-20 will-change-transform pointer-events-none"
-                    style={{ transform: 'translateZ(0)' }}
-                  />
-                )}
-              </AnimatePresence>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* === COLUNA DIREITA: DISPLAY 05 === */}
-        <div className="relative aspect-square flex items-center justify-center mt-12 md:mt-14 lg:mt-0 max-w-[300px] md:max-w-[400px] lg:max-w-none mx-auto lg:mx-0">
-          <div className="absolute inset-0 border border-white/5 rounded-full" />
-          <div className="absolute inset-4 md:inset-8 lg:inset-10 border border-white/5 rounded-full" />
-          
-          <div className="relative w-full h-full max-w-[280px] md:max-w-[380px] lg:max-w-[450px] max-h-[280px] md:max-h-[380px] lg:max-h-[450px] bg-transparent flex items-center justify-center">
             <motion.div 
-              animate={{ rotate: 360 }}
-              transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-              className="absolute w-40 md:w-56 lg:w-72 h-40 md:h-56 lg:h-72 border-2 border-blue-500/30 flex items-center justify-center bg-blue-500/5 will-change-transform"
-              style={{ clipPath: "polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)", transform: 'translateZ(0)' }}
+                animate={isScanning ? { scale: 0.95 } : { scale: 1 }}
+                className="relative w-24 h-24 sm:w-36 sm:h-36 md:w-44 md:h-44 flex items-center justify-center z-20"
+                style={{ filter: "drop-shadow(0 0 10px rgba(102, 126, 234, 0.25))" }}
             >
-              <div className="w-full h-full bg-gradient-to-t from-blue-500/20 to-transparent" />
+                <div className="absolute inset-0 bg-codexo-dark-light clip-pentagon" />
+                <div className="absolute inset-[1px] bg-gradient-to-br from-white/10 to-transparent clip-pentagon backdrop-blur-xl" />
+
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={selected}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 1.2, filter: "blur(5px)" }}
+                        transition={{ duration: 0.2 }}
+                        className="relative z-30 w-8 h-8 sm:w-14 sm:h-14 md:w-16 md:h-16 text-white"
+                    >
+                        {pilares[selected].icon}
+                    </motion.div>
+                </AnimatePresence>
+                
+                 {isScanning && (
+                    <motion.div 
+                        initial={{ top: "-10%", opacity: 0 }}
+                        animate={{ top: "110%", opacity: [0, 0.4, 0] }}
+                        transition={{ duration: 0.6 }}
+                        className="absolute left-0 right-0 h-[1px] bg-white z-40 pointer-events-none blur-[0.5px]"
+                    />
+                )}
             </motion.div>
-
-            <div className="absolute flex flex-col items-center z-10">
-               <span className="text-6xl md:text-8xl lg:text-9xl font-black text-white/10 leading-none">05</span>
-               <span className="text-[8px] md:text-[10px] lg:text-[12px] font-bold text-blue-500 tracking-[0.3em] md:tracking-[0.45em] lg:tracking-[0.5em] uppercase">Especialistas</span>
-            </div>
-
-            <motion.div 
-              animate={{ top: ["0%", "100%", "0%"] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-              className="absolute left-0 right-0 h-[1px] bg-blue-500/40 z-20 will-change-transform pointer-events-none"
-              style={{ transform: 'translateZ(0)' }}
-            />
-          </div>
         </div>
       </div>
     </section>

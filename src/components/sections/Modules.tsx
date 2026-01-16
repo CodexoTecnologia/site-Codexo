@@ -26,8 +26,8 @@ export default function Modules() {
   ];
 
   return (
-    <section id="servicos" className="relative z-10 py-12 sm:py-16 md:py-20 lg:py-24 xl:py-28 px-4 sm:px-6 md:px-8 container mx-auto">
-      {/* CABEÇALHO SIMPLIFICADO E PROFISSIONAL */}
+    <section id="servicos" className="relative z-10 py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 container mx-auto">
+      {/* CABEÇALHO */}
       <div className="flex flex-col mb-8 sm:mb-10 md:mb-12 lg:mb-14 xl:mb-16">
         <motion.span 
           initial={{ opacity: 0, x: -20 }} 
@@ -66,10 +66,6 @@ export default function Modules() {
                 {item.desc}
               </p>
 
-              <div className="pt-2 sm:pt-3 md:pt-3.5 lg:pt-4 flex items-center gap-2 sm:gap-2.5 md:gap-3">
-                <div className="w-5 sm:w-6 md:w-7 lg:w-8 h-[1px] bg-codexo-primary/30" />
-                <span className="text-[6px] sm:text-[7px] md:text-[7.5px] lg:text-[8px] text-slate-600 font-bold uppercase tracking-widest">Protocolo Ativo // Codexo 2026</span>
-              </div>
             </div>
 
             <div className="absolute top-0 right-0 w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-18 lg:h-18 xl:w-20 xl:h-20 border-t border-r border-white/5 group-hover:border-codexo-primary/20 transition-colors" />

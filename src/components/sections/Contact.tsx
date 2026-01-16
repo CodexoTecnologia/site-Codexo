@@ -25,13 +25,13 @@ export default function Contact() {
     }
   };
   return (
-    <section id="contato" className="relative py-12 sm:py-16 md:py-20 lg:py-24 xl:py-28 px-4 sm:px-6 md:px-8 container mx-auto border-t border-white/5">
+    <section id="contato" className="relative py-12 sm:py-16 md:py-20 lg:py-24 xl:py-28 px-4 sm:px-6 md:px-8 container mx-auto ">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-16 xl:gap-20">
         
         {/* LADO ESQUERDO */}
         <div className="space-y-5 sm:space-y-6 md:space-y-8 lg:space-y-10">
           <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-            <span className="text-codexo-primary font-black text-[8px] sm:text-[9px] md:text-[10px] tracking-[0.4em] sm:tracking-[0.45em] md:tracking-[0.5em] lg:tracking-[0.55em] xl:tracking-[0.6em] uppercase">Início de Protocolo // Contato</span>
+            <span className="text-codexo-primary font-black text-[8px] sm:text-[9px] md:text-[10px] tracking-[0.4em] sm:tracking-[0.45em] md:tracking-[0.5em] lg:tracking-[0.55em] xl:tracking-[0.6em] uppercase">Contato</span>
             <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-8xl font-black text-white leading-[0.9] uppercase mt-3 sm:mt-4 md:mt-5 lg:mt-6 tracking-tighter">
               VAMOS <br /> <span className="outline-text">CONSTRUIR?</span>
             </h3>

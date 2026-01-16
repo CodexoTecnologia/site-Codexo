@@ -2,14 +2,14 @@
 
 @theme {
   /* Paleta Extraída do seu styles.css */
-  --color-codexo-primary: #667eea;
+  --color-codexo-primary: #55305c;
   --color-codexo-secondary: #764ba2;
-  --color-codexo-accent: #f093fb;
+  --color-codexo-accent: #d896ff;
   --color-codexo-dark: #0f0f1e;
   --color-codexo-dark-light: #1a1a2e;
   
   /* Gradiente oficial como variável */
-  --background-codexo-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --background-codexo-gradient: linear-gradient(135deg, #55305c 0%, #764ba2 100%);
 }
 
 @keyframes float {
@@ -44,8 +44,8 @@ html {
 
 
 .bg-codexo-dark {
-  background-image: linear-gradient(rgba(102, 126, 234, 0.03) 1px, transparent 1px), 
-                    linear-gradient(90deg, rgba(102, 126, 234, 0.03) 1px, transparent 1px);
+  background-image: linear-gradient(rgba(85, 48, 92, 0.03) 1px, transparent 1px), 
+                    linear-gradient(90deg, rgba(85, 48, 92, 0.03) 1px, transparent 1px);
   background-size: 30px 30px;
 }
 
@@ -61,7 +61,7 @@ html {
 }
 
 .codexo-phone-input:focus-within {
-  border-color: #667eea !important;
+  border-color: #55305c !important;
 }
 
 /* Ajuste das Cores da Lista de Países */

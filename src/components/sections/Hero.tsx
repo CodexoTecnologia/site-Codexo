@@ -1,37 +1,10 @@
 "use client";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
 
 export default function Hero() {
-  const fragments = [
-    { x: -150, y: -100, delay: 0.2 },
-    { x: 180, y: -80, delay: 0.4 },
-    { x: -120, y: 150, delay: 0.6 },
-    { x: 200, y: 120, delay: 0.8 },
-    { x: 0, y: -180, delay: 1.0 },
-  ];
-
   return (
-    <section id="inicio" className="relative z-10 min-h-[100vh] flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 lg:px-10 text-center bg-grid-tech pb-0 pt-20 sm:pt-24 md:pt-28">
-      {/* Background sutil com fragmentos geométricos */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
-        <AnimatePresence>
-          {fragments.map((frag, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, scale: 0, x: 0, y: 0 }}
-              animate={{ opacity: [0, 0.3, 0.1], scale: [0, 1.2, 1], x: frag.x, y: frag.y, rotate: 360 }}
-              transition={{ duration: 5, delay: frag.delay, repeat: Infinity, repeatType: "reverse" }}
-              className="absolute w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 border border-codexo-primary/20 bg-codexo-primary/5 clip-pentagon blur-[1px]"
-            />
-          ))}
-        </AnimatePresence>
-        <motion.div 
-          animate={{ scale: [1, 1.1, 1], opacity: [0.15, 0.25, 0.15] }}
-          transition={{ duration: 6, repeat: Infinity }}
-          className="w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] xl:w-[600px] xl:h-[600px] bg-codexo-primary/10 blur-[60px] sm:blur-[80px] md:blur-[100px] lg:blur-[120px] xl:blur-[140px] rounded-full"
-        />
-      </div>
+    <section id="inicio" className="relative z-10 min-h-[100vh] flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 lg:px-10 text-center bg-grid-tech pb-12 pt-20 sm:pt-24 md:pt-28">
 
       {/* Conteúdo Principal */}
       <motion.div 
@@ -61,12 +34,12 @@ export default function Hero() {
       >
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-5 lg:gap-6 justify-center">
           <Link href="#contato" className="w-full sm:w-auto">
-            <motion.button 
-              whileHover={{ scale: 1.02, backgroundColor: "#fff", color: "#000" }} 
-              className="w-full sm:w-auto px-6 sm:px-7 md:px-8 lg:px-10 py-3 sm:py-3.5 md:py-4 bg-codexo-primary text-white font-black text-[8px] sm:text-[9px] md:text-[10px] lg:text-[11px] tracking-[0.2em] sm:tracking-[0.25em] md:tracking-[0.3em] uppercase transition-all shadow-lg shadow-codexo-primary/20 rounded"
-            >
-              Falar com Especialista
-            </motion.button>
+<motion.button 
+  whileHover={{ scale: 1.02, opacity: 0.9 }} 
+  className="w-full sm:w-auto px-6 sm:px-7 md:px-8 lg:px-10 py-3 sm:py-3.5 md:py-4 bg-gradient-to-r from-codexo-primary to-codexo-secondary text-white font-black text-[8px] sm:text-[9px] md:text-[10px] lg:text-[11px] tracking-[0.2em] sm:tracking-[0.25em] md:tracking-[0.3em] uppercase transition-all shadow-lg shadow-codexo-primary/30 rounded"
+>
+  Falar com Especialista
+</motion.button>
           </Link>
           <Link href="#portfolio" className="w-full sm:w-auto">
             <motion.button 
@@ -85,12 +58,11 @@ export default function Hero() {
 
       {/* Scroll Indicator */}
       <motion.div 
-        animate={{ y: [0, 10, 0] }}
+        animate={{ y: [0, 8, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
-        className="mt-8 md:mt-12 lg:mt-16 flex flex-col items-center gap-1 md:gap-2 pb-6 md:pb-10"
+        className="mt-4 md:mt-8 flex flex-col items-center gap-1 pb-4"
       >
-        <span className="text-[7px] md:text-[9px] text-slate-600 font-black uppercase tracking-[0.2em] md:tracking-[0.3em]">Scroll</span>
-        <div className="w-[1px] h-6 md:h-10 lg:h-12 bg-gradient-to-b from-codexo-primary to-transparent opacity-50" />
+        <div className="w-[1px] h-6 md:h-10 bg-gradient-to-b from-codexo-primary to-transparent opacity-40" />
       </motion.div>
     </section>
   );

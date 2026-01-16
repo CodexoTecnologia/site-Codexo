@@ -3,7 +3,6 @@ import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About"; 
 import Modules from "@/components/sections/Modules";
-import Manifesto from "@/components/sections/Manifesto";
 import Portfolio from "@/components/sections/Portfolio";
 import Footer from "@/components/layout/Footer"; 
 import Contact from "@/components/sections/Contact"; 
@@ -18,7 +17,6 @@ export default function Home() {
       <div id="sobre"><About /></div>
       <div id="servicos"><Modules /></div>
       <div id="portfolio"><Portfolio /></div>
-      <div id="manifesto"><Manifesto /></div>
       <div id="contato"><Contact /></div>
 
       <Footer />

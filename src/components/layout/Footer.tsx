@@ -16,7 +16,6 @@ export default function Footer() {
     { name: "Sobre", href: "#sobre" },
     { name: "Serviços", href: "#servicos" },
     { name: "Portfólio", href: "#portfolio" },
-    { name: "Cultura", href: "#manifesto" },
     { name: "Contato", href: "#contato" },
   ];
 
@@ -74,10 +73,6 @@ export default function Footer() {
             <h4 className="text-white font-black text-[9px] sm:text-[10px] uppercase tracking-[0.35em] sm:tracking-[0.4em] text-codexo-primary">Canais de Entrada</h4>
             <div className="space-y-3 sm:space-y-4">
               <div>
-                <p className="text-slate-500 text-[9px] sm:text-[10px] uppercase tracking-widest">Sede Operacional</p>
-                <p className="text-white font-bold text-[10px] sm:text-xs uppercase italic">Curitiba, PR - Brasil</p>
-              </div>
-              <div>
                 <p className="text-slate-500 text-[9px] sm:text-[10px] uppercase tracking-widest">Digital</p>
                 <p className="text-codexo-primary font-black text-xs sm:text-sm break-all lg:break-normal">codexotecnologia@gmail.com</p>
               </div>
@@ -92,19 +87,11 @@ export default function Footer() {
         {/* BARRA FINAL TÉCNICA */}
         <div className="flex flex-col md:flex-row justify-between items-center pt-6 sm:pt-8 md:pt-10 border-t border-white/5 gap-4 sm:gap-5 md:gap-6">
           <div className="flex items-center gap-3 sm:gap-4">
-             <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-codexo-primary rounded-full animate-pulse" />
              <p className="text-[8px] sm:text-[9px] text-slate-600 font-bold uppercase tracking-[0.25em] sm:tracking-[0.3em] text-center md:text-left">
                © 2026 Codexo Tecnologia. Todos os direitos reservados.
              </p>
           </div>
-          <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 md:gap-6 lg:gap-8">
-            <span className="text-[8px] sm:text-[9px] text-slate-700 font-black uppercase tracking-[0.4em] sm:tracking-[0.5em]">
-              Security Protocol: Active
-            </span>
-            <span className="text-[9px] sm:text-[10px] text-white/40 font-black uppercase tracking-[0.25em] sm:tracking-[0.3em] bg-white/5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-md">
-              System Core V.4.0
-            </span>
-          </div>
+         
         </div>
       </div>
     </footer>
