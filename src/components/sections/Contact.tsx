@@ -1,40 +1,85 @@
 "use client";
-import { useState } from "react";
-import { motion } from "framer-motion";
-import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
-import 'react-phone-number-input/style.css';
+import { useState, useEffect } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import dynamic from 'next/dynamic';
+
+// Lazy load do Componente Visual
+const PhoneInput = dynamic(() => import('react-phone-number-input').then(mod => mod.default), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-[46px] sm:h-[50px] bg-codexo-dark-light border border-white/10 rounded-lg flex items-center px-4">
+      <div className="w-full text-slate-500 text-[10px]">Carregando...</div>
+    </div>
+  ),
+});
 
 export default function Contact() {
+  const shouldReduceMotion = useReducedMotion();
   const [phoneValue, setPhoneValue] = useState<string | undefined>();
   const [isPhoneValid, setIsPhoneValid] = useState(true);
+  // Estado para controlar a validação apenas no cliente
+  const [isValidating, setIsValidating] = useState(false);
+  
+  useEffect(() => {
+    // Carregamento de CSS otimizado para não bloquear a renderização inicial
+    if (typeof window !== 'undefined' && !document.querySelector('link[href*="react-phone-number-input"]')) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://unpkg.com/react-phone-number-input@3.4.14/style.css';
+      // Adiciona media="print" e troca para "all" após load para não bloquear render
+      link.media = 'print'; 
+      link.onload = () => { link.media = 'all' };
+      document.head.appendChild(link);
+    }
+  }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    // Validação de Rigor Analítico: impede o envio se o número não condizer com o país
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsValidating(true);
+
+    // DICA DE PERFORMANCE: Importamos a lógica pesada apenas no Submit
+    // Isso economiza KB preciosos no carregamento inicial da página
+    let valid = false;
+
     if (phoneValue) {
-      const valid = isValidPhoneNumber(phoneValue);
-      setIsPhoneValid(valid);
-      
-      if (!valid) {
-        e.preventDefault();
-        return;
+      try {
+        // Dynamic import da função de validação
+        const { isValidPhoneNumber } = await import('react-phone-number-input');
+        valid = isValidPhoneNumber(phoneValue);
+      } catch (error) {
+        console.error("Erro ao validar telefone", error);
+        valid = true; // Fallback em caso de erro de importação
       }
-    } else {
-      e.preventDefault();
-      setIsPhoneValid(false);
+    }
+
+    setIsPhoneValid(valid);
+    setIsValidating(false);
+
+    if (!valid && phoneValue) {
       return;
     }
+
+    // Se chegou aqui, pode enviar
+    // e.target.submit(); // Ou sua lógica de fetch/formspree
+    const form = e.target as HTMLFormElement;
+    form.submit();
   };
+
   return (
-    <section id="contato" className="relative py-12 sm:py-16 md:py-20 lg:py-24 xl:py-28 px-4 sm:px-6 md:px-8 container mx-auto ">
+    <section id="contato" className="relative py-12 sm:py-16 md:py-20 lg:py-24 xl:py-28 px-4 sm:px-6 md:px-8 container mx-auto">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-16 xl:gap-20">
         
         {/* LADO ESQUERDO */}
         <div className="space-y-5 sm:space-y-6 md:space-y-8 lg:space-y-10">
-          <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+          <motion.div 
+            initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, x: -20 }} 
+            whileInView={{ opacity: 1, x: 0 }} 
+            viewport={{ once: true }}
+          >
             <span className="text-codexo-primary font-black text-[8px] sm:text-[9px] md:text-[10px] tracking-[0.4em] sm:tracking-[0.45em] md:tracking-[0.5em] lg:tracking-[0.55em] xl:tracking-[0.6em] uppercase">Contato</span>
-            <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-8xl font-black text-white leading-[0.9] uppercase mt-3 sm:mt-4 md:mt-5 lg:mt-6 tracking-tighter">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-8xl font-black text-white leading-[0.9] uppercase mt-3 sm:mt-4 md:mt-5 lg:mt-6 tracking-tighter">
               VAMOS <br /> <span className="outline-text">CONSTRUIR?</span>
-            </h3>
+            </h2>
           </motion.div>
           
           <div className="space-y-4 sm:space-y-5 md:space-y-6 lg:space-y-8">
@@ -42,7 +87,8 @@ export default function Contact() {
               Pronto para transformar sua ideia em realidade digital com engenharia de elite?
             </p>
             <div className="p-4 sm:p-5 md:p-6 lg:p-7 xl:p-8 bg-white/[0.02] border border-white/5 rounded-xl sm:rounded-xl md:rounded-2xl space-y-2 sm:space-y-2.5 md:space-y-3 lg:space-y-3.5 xl:space-y-4 shadow-2xl relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 bg-codexo-primary/5 blur-[35px] sm:blur-[40px] md:blur-[45px] lg:blur-[50px] group-hover:bg-codexo-primary/10 transition-colors" />
+              {/* OTIMIZAÇÃO: Blur reduzido no mobile, aumentado no desktop */}
+              <div className="absolute top-0 right-0 w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 bg-codexo-primary/5 blur-[20px] md:blur-[50px] group-hover:bg-codexo-primary/10 transition-colors" />
               <p className="text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] font-black tracking-[0.2em] sm:tracking-[0.25em] md:tracking-[0.275em] lg:tracking-[0.3em] text-white uppercase opacity-50">Canais Oficiais:</p>
               <div className="space-y-1 sm:space-y-1.5 text-sm sm:text-base md:text-lg font-bold">
                 <p className="text-codexo-primary break-all">codexotecnologia@gmail.com</p>
@@ -53,7 +99,12 @@ export default function Contact() {
         </div>
 
         {/* LADO DIREITO: FORMULÁRIO */}
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="h-full">
+        <motion.div 
+          initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }} 
+          whileInView={{ opacity: 1, y: 0 }} 
+          viewport={{ once: true }} 
+          className="h-full"
+        >
           <form 
             onSubmit={handleSubmit}
             action="https://formspree.io/f/YOUR_ID" 
@@ -62,13 +113,20 @@ export default function Contact() {
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5 md:gap-4">
               <div className="space-y-1.5 sm:space-y-2">
-                <label className="text-[7px] sm:text-[8px] md:text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1 sm:ml-1.5 md:ml-2">Nome</label>
-                <input type="text" name="name" placeholder="Seu nome" required className="w-full bg-codexo-dark-light border border-white/10 p-2.5 sm:p-3 md:p-3.5 lg:p-4 text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs text-white outline-none focus:border-codexo-primary transition-all rounded-lg sm:rounded-lg md:rounded-xl" />
+                <label htmlFor="contact-name" className="text-[7px] sm:text-[8px] md:text-[9px] font-black text-slate-300 uppercase tracking-widest ml-1 sm:ml-1.5 md:ml-2">Nome</label>
+                <input 
+                  type="text" 
+                  id="contact-name"
+                  name="name" 
+                  placeholder="Seu nome" 
+                  required 
+                  className="w-full bg-codexo-dark-light border border-white/10 p-2.5 sm:p-3 md:p-3.5 lg:p-4 text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs text-white outline-none focus:border-codexo-primary transition-all rounded-lg sm:rounded-lg md:rounded-xl" 
+                />
               </div>
 
               <div className="space-y-1.5 sm:space-y-2">
-                <label className="text-[7px] sm:text-[8px] md:text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1 sm:ml-1.5 md:ml-2">
-                  Telefone {!isPhoneValid && <span className="text-red-500 ml-2 animate-pulse text-[6px] sm:text-[7px]"> FORMATO INVÁLIDO</span>}
+                <label htmlFor="contact-phone" className="text-[7px] sm:text-[8px] md:text-[9px] font-black text-slate-300 uppercase tracking-widest ml-1 sm:ml-1.5 md:ml-2">
+                  Telefone {!isPhoneValid && <span className="text-red-500 ml-2 animate-pulse text-[6px] sm:text-[7px]"> INVÁLIDO</span>}
                 </label>
                 <div className={`codexo-phone-wrapper ${!isPhoneValid ? 'border-red-500/50' : 'border-white/10'}`}>
                   <PhoneInput
@@ -77,21 +135,22 @@ export default function Contact() {
                     value={phoneValue}
                     onChange={(val) => {
                       setPhoneValue(val);
-                      if (val) setIsPhoneValid(isValidPhoneNumber(val));
+                      if (!isPhoneValid && val) setIsPhoneValid(true); // Limpa erro ao digitar
                     }}
                     countrySelectProps={{ className: "codexo-country-select" }}
                     className="codexo-phone-input"
                     placeholder="Número de telefone"
                   />
-                  <input type="hidden" name="phone" value={phoneValue} />
+                  <input type="hidden" id="contact-phone" name="phone" value={phoneValue} />
                 </div>
               </div>
             </div>
 
             <div className="space-y-1.5 sm:space-y-2">
-              <label className="text-[7px] sm:text-[8px] md:text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1 sm:ml-1.5 md:ml-2">E-mail</label>
+              <label htmlFor="contact-email" className="text-[7px] sm:text-[8px] md:text-[9px] font-black text-slate-300 uppercase tracking-widest ml-1 sm:ml-1.5 md:ml-2">E-mail</label>
               <input 
-                type="email" 
+                type="email"
+                id="contact-email"
                 name="email" 
                 placeholder="exemplo@dominio.com" 
                 required 
@@ -100,10 +159,11 @@ export default function Contact() {
             </div>
             
             <div className="space-y-1.5 sm:space-y-2 flex-grow">
-              <label className="text-[7px] sm:text-[8px] md:text-[9px] font-black text-slate-500 uppercase tracking-widest ml-1 sm:ml-1.5 md:ml-2">
+              <label htmlFor="contact-message" className="text-[7px] sm:text-[8px] md:text-[9px] font-black text-slate-300 uppercase tracking-widest ml-1 sm:ml-1.5 md:ml-2">
                 Descrição do Projeto
               </label>
               <textarea 
+                id="contact-message"
                 name="message" 
                 placeholder="Descreva seu desafio técnico..." 
                 required 
@@ -111,92 +171,25 @@ export default function Contact() {
               />
             </div>
 
-            {/* BOTÃO COM ESPAÇAMENTO REFORÇADO */}
             <button 
-              type="submit" 
-              className="group relative w-full h-11 sm:h-12 md:h-14 lg:h-16 bg-codexo-primary overflow-hidden transition-all rounded-lg sm:rounded-lg md:rounded-xl shadow-lg shadow-codexo-primary/20 mt-4 sm:mt-5 md:mt-6 lg:mt-8 xl:mt-10 active:scale-95"
+              type="submit"
+              disabled={isValidating}
+              aria-label="Enviar mensagem de contato"
+              className="group relative w-full h-11 sm:h-12 md:h-14 lg:h-16 bg-codexo-primary overflow-hidden transition-all rounded-lg sm:rounded-lg md:rounded-xl shadow-lg shadow-codexo-primary/20 mt-4 sm:mt-5 md:mt-6 lg:mt-8 xl:mt-10 active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
             >
               <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out opacity-10" />
               <div className="relative z-10 flex items-center justify-center gap-2 sm:gap-2.5 md:gap-3 lg:gap-4">
                 <span className="text-[8px] sm:text-[9px] md:text-[10px] lg:text-[11px] font-black tracking-[0.35em] sm:tracking-[0.4em] md:tracking-[0.45em] lg:tracking-[0.5em] text-white uppercase">
-                  Enviar Mensagem
+                  {isValidating ? 'Validando...' : 'Enviar Mensagem'}
                 </span>
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse shadow-[0_0_10px_white]" />
+                {!isValidating && (
+                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse shadow-[0_0_10px_white]" />
+                )}
               </div>
             </button>
           </form>
         </motion.div>
       </div>
-
-      {/* Ajustes globais para responsividade do seletor de país do telefone */}
-      <style jsx global>{`
-        .codexo-phone-wrapper {
-          @apply relative w-full bg-codexo-dark-light border p-2.5 sm:p-3 md:p-3.5 lg:p-4 rounded-lg sm:rounded-lg md:rounded-xl flex items-center gap-2;
-        }
-        .codexo-phone-wrapper .PhoneInput {
-          width: 100%;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
-        .codexo-phone-wrapper .PhoneInputCountry {
-          display: flex;
-          align-items: center;
-        }
-        .codexo-phone-wrapper .PhoneInputCountrySelect {
-          width: auto;
-        }
-        .codexo-phone-wrapper select.codexo-country-select {
-          width: 100%;
-          max-width: 110px;
-          background: transparent;
-          color: #fff;
-          font-size: 12px;
-          border: none;
-          outline: none;
-        }
-        .codexo-phone-wrapper .PhoneInputInput {
-          flex: 1;
-          background: transparent;
-          border: none;
-          outline: none;
-          color: #fff;
-          font-size: 13px;
-        }
-        /* Dropdown de países: limitar altura e permitir scroll em telas pequenas */
-        .codexo-phone-wrapper select.codexo-country-select option {
-          font-size: 12px;
-        }
-        /* Força limite de altura do dropdown (browsers baseados em WebKit/Chromium) */
-        select.codexo-country-select {
-          max-height: 50vh !important;
-          overflow-y: auto !important;
-        }
-        @media (max-width: 768px) {
-          .codexo-phone-wrapper select.codexo-country-select {
-            max-width: 90px;
-            font-size: 10px;
-          }
-          .codexo-phone-wrapper select.codexo-country-select option {
-            font-size: 11px;
-          }
-          select.codexo-country-select {
-            max-height: 45vh !important;
-          }
-        }
-        @media (max-width: 480px) {
-          .codexo-phone-wrapper select.codexo-country-select {
-            max-width: 78px;
-            font-size: 9px;
-          }
-          .codexo-phone-wrapper select.codexo-country-select option {
-            font-size: 10px;
-          }
-          select.codexo-country-select {
-            max-height: 40vh !important;
-          }
-        }
-      `}</style>
     </section>
   );
 }

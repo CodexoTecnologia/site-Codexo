@@ -5,8 +5,17 @@ import { Handshake, Eye, Zap, Heart, ShieldCheck } from 'lucide-react';
 
 type IconKey = "Parceria" | "Transparência" | "Performance" | "Empatia" | "Segurança";
 
-const generateParticles = (count: number) => {
-  return Array.from({ length: count }, (_, i) => ({
+type Particle = {
+  id: number;
+  angle: number;
+  distance: number;
+  size: number;
+  duration: number;
+};
+
+const generateParticles = (count: number): Particle[] => {
+  // Reduzido de 20 para 12 partículas para melhor performance
+  return Array.from({ length: Math.min(count, 12) }, (_, i) => ({
     id: i,
     angle: (Math.random() * 360),
     distance: Math.random() * 70 + 40,
@@ -19,7 +28,7 @@ export default function About() {
   const iconKeys: IconKey[] = ["Parceria", "Transparência", "Performance", "Empatia", "Segurança"];
   const [selected, setSelected] = useState<IconKey>("Parceria");
   const [isScanning, setIsScanning] = useState(false);
-  const [particles, setParticles] = useState<any[]>([]);
+  const [particles, setParticles] = useState<Particle[]>([]);
 
   const pilares = {
     Parceria: { 
@@ -52,19 +61,42 @@ export default function About() {
   const triggerChange = useCallback((nextVal: IconKey) => {
     if (nextVal === selected) return;
     setIsScanning(true);
-    setParticles(generateParticles(20));
+    setParticles(generateParticles(12));
     setTimeout(() => setSelected(nextVal), 250);
     setTimeout(() => setIsScanning(false), 750);
   }, [selected]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const currentIndex = iconKeys.indexOf(selected);
-      const nextIndex = (currentIndex + 1) % iconKeys.length;
-      triggerChange(iconKeys[nextIndex]);
-    }, 8000);
-    return () => clearInterval(interval);
-  }, [selected, triggerChange]);
+    // Pausa a animação automática quando a página não está visível
+    let interval: NodeJS.Timeout;
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        if (interval) clearInterval(interval);
+      } else {
+        interval = setInterval(() => {
+          const currentIndex = iconKeys.indexOf(selected);
+          const nextIndex = (currentIndex + 1) % iconKeys.length;
+          triggerChange(iconKeys[nextIndex]);
+        }, 10000); // Aumentado de 8s para 10s para reduzir trabalho
+      }
+    };
+    
+    // Delay inicial para não bloquear render
+    const timeout = setTimeout(() => {
+      interval = setInterval(() => {
+        const currentIndex = iconKeys.indexOf(selected);
+        const nextIndex = (currentIndex + 1) % iconKeys.length;
+        triggerChange(iconKeys[nextIndex]);
+      }, 10000);
+    }, 2000);
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      clearTimeout(timeout);
+      if (interval) clearInterval(interval);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [selected, triggerChange, iconKeys]);
 
   return (
     <section id="sobre" className="relative pt-4 sm:pt-8 md:pt-12 lg:pt-16 pb-6 sm:pb-10 px-4 sm:px-6 md:px-8 container mx-auto overflow-hidden">
@@ -118,9 +150,9 @@ export default function About() {
                         transition={{ duration: 0.3 }}
                         className="space-y-3 sm:space-y-4"
                     >
-                        <h4 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white uppercase italic tracking-tight">
+                        <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white uppercase italic tracking-tight">
                             {selected}
-                        </h4>
+                        </h3>
                         
                         <p className="text-slate-400 text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed font-medium border-l-2 border-codexo-primary/50 pl-4">
                             {pilares[selected].desc}

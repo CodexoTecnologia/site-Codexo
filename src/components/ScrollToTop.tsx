@@ -1,23 +1,34 @@
 "use client";
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { FaArrowUp } from "react-icons/fa"; // Flecha conforme solicitado
+import { FaArrowUp } from "react-icons/fa6"; // Atualizado para fa6 conforme seus outros arquivos
 
 export default function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const toggleVisibility = () => {
-      // Ativação baseada no scroll para eficiência de UX
-      if (window.scrollY > 400) {
+      // Valor ajustado para 300 para aparecer logo após o Hero
+      if (window.scrollY > 300) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
       }
     };
 
-    window.addEventListener("scroll", toggleVisibility);
-    return () => window.removeEventListener("scroll", toggleVisibility);
+    // Otimização: requestAnimationFrame para não travar o scroll em celulares antigos
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          toggleVisibility();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const scrollToTop = () => {
@@ -28,19 +39,28 @@ export default function ScrollToTop() {
   };
 
   return (
-    <AnimatePresence>
-      {isVisible && (
-        <motion.button
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.5 }}
-          onClick={scrollToTop}
-          // Formato redondo, borda sutil e posicionamento ao lado do WhatsApp
-          className="fixed bottom-10 right-28 z-[999] w-12 h-12 rounded-full bg-codexo-dark border border-codexo-primary/40 text-codexo-primary flex items-center justify-center shadow-lg shadow-black/50 hover:bg-codexo-primary hover:text-white transition-all duration-300 group"
-        >
-          <FaArrowUp className="text-sm group-hover:-translate-y-1 transition-transform" />
-        </motion.button>
-      )}
-    </AnimatePresence>
+    <button
+      onClick={scrollToTop}
+      aria-label="Voltar ao topo"
+      // MOBILE FIRST:
+      // 1. 'right-4': No celular fica no cantinho certo.
+      // 2. 'md:right-8': No desktop ganha mais ar.
+      // 3. Lógica de visibilidade via classes CSS (sem remover do DOM)
+      className={`
+        fixed bottom-6 right-4 md:bottom-10 md:right-8 z-[90] 
+        w-10 h-10 md:w-12 md:h-12 rounded-full 
+        bg-codexo-dark border border-codexo-primary/40 text-codexo-primary 
+        flex items-center justify-center 
+        shadow-lg shadow-black/50 backdrop-blur-sm
+        transition-all duration-500 ease-in-out group
+        hover:bg-codexo-primary hover:text-white hover:border-codexo-primary
+        hover:shadow-codexo-primary/40 hover:-translate-y-1
+        ${isVisible 
+          ? "opacity-100 translate-y-0 scale-100" 
+          : "opacity-0 translate-y-10 scale-75 pointer-events-none"}
+      `}
+    >
+      <FaArrowUp className="text-sm md:text-base transition-transform duration-300 group-hover:-translate-y-0.5" />
+    </button>
   );
 }

@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+/* 1. Definições de Tema (Variáveis CSS Nativas) */
+@theme {
+  --color-codexo-primary: #55305c;
+  --color-codexo-secondary: #764ba2;
+  --color-codexo-accent: #d896ff;
+  --color-codexo-dark: #0f0f1e;
+  --color-codexo-dark-light: #1a1a2e;
+  
+  --background-codexo-gradient: linear-gradient(135deg, #55305c 0%, #764ba2 100%);
+
+  /* Animações registradas no tema para performance */
+  --animate-float: float 6s ease-in-out infinite;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-20px) scale(1.05); }
+  }
+}
+
+/* 2. Configurações Base */
+@layer base {
+  :root {
+    background-color: var(--color-codexo-dark);
+    color: white;
+    /* Otimização de rolagem apenas se o usuário não preferir movimento reduzido */
+    @media (prefers-reduced-motion: no-preference) {
+      scroll-behavior: smooth;
+    }
+  }
+
+  ::selection {
+    background: var(--color-codexo-primary);
+    color: white;
+  }
+  
+  html {
+    /* Evita layout shifts horizontais em mobile */
+    overflow-x: hidden;
+  }
+  
+  body {
+    overflow-x: hidden;
+  }
+}
+
+/* 3. Utilitários de Performance e Layout */
+@layer utilities {
+  /* Pentágono Unificado (A versão corrigida) */
+  .clip-pentagon {
+    clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+  }
+
+  /* Background Grid Otimizado (GPU Friendly) */
+  .bg-codexo-dark {
+    background-color: var(--color-codexo-dark);
+    background-image: linear-gradient(rgba(85, 48, 92, 0.03) 1px, transparent 1px), 
+                      linear-gradient(90deg, rgba(85, 48, 92, 0.03) 1px, transparent 1px);
+    background-size: 30px 30px;
+    /* OTIMIZAÇÃO: Evita repintura em scroll pesado */
+    background-attachment: fixed; 
+  }
+}
+
+/* 4. Componentes de Terceiros (Isolados) */
+@layer components {
+  /* Customização Phone Input */
+  .codexo-phone-input {
+    display: flex;
+    align-items: center;
+    background: var(--color-codexo-dark-light) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    padding: 0 1rem;
+    height: 52px;
+    transition: border-color 0.3s ease;
+  }
+
+  .codexo-phone-input:focus-within {
+    border-color: var(--color-codexo-primary) !important;
+  }
+
+  .PhoneInputCountrySelect {
+    background-color: var(--color-codexo-dark) !important;
+    color: white !important;
+    cursor: pointer;
+    padding: 5px;
+  }
+
+  .PhoneInputCountry {
+    background: transparent !important;
+  }
+
+  .PhoneInputInput {
+    background: transparent !important;
+    border: none !important;
+    color: white !important;
+    font-size: 0.75rem !important;
+    padding: 1rem !important;
+    outline: none !important;
+    width: 100%;
+  }
+
+  select option {
+    background-color: var(--color-codexo-dark) !important;
+    color: white !important;
+  }
+}

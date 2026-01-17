@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "clean": "rm -rf .next",
+    "dev:clean": "npm run clean && npm run dev"
   },
   "dependencies": {
     "framer-motion": "^12.26.1",
@@ -15,7 +17,8 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-icons": "^5.5.0",
-    "react-phone-number-input": "^3.4.14"
+    "react-phone-number-input": "^3.4.14",
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
