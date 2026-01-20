@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import dynamic from 'next/dynamic';
 
-// Lazy load do Componente Visual
 const PhoneInput = dynamic(() => import('react-phone-number-input').then(mod => mod.default), {
   ssr: false,
   loading: () => (
@@ -17,16 +16,13 @@ export default function Contact() {
   const shouldReduceMotion = useReducedMotion();
   const [phoneValue, setPhoneValue] = useState<string | undefined>();
   const [isPhoneValid, setIsPhoneValid] = useState(true);
-  // Estado para controlar a validação apenas no cliente
   const [isValidating, setIsValidating] = useState(false);
   
   useEffect(() => {
-    // Carregamento de CSS otimizado para não bloquear a renderização inicial
     if (typeof window !== 'undefined' && !document.querySelector('link[href*="react-phone-number-input"]')) {
       const link = document.createElement('link');
       link.rel = 'stylesheet';
       link.href = 'https://unpkg.com/react-phone-number-input@3.4.14/style.css';
-      // Adiciona media="print" e troca para "all" após load para não bloquear render
       link.media = 'print'; 
       link.onload = () => { link.media = 'all' };
       document.head.appendChild(link);
@@ -37,18 +33,15 @@ export default function Contact() {
     e.preventDefault();
     setIsValidating(true);
 
-    // DICA DE PERFORMANCE: Importamos a lógica pesada apenas no Submit
-    // Isso economiza KB preciosos no carregamento inicial da página
     let valid = false;
 
     if (phoneValue) {
       try {
-        // Dynamic import da função de validação
         const { isValidPhoneNumber } = await import('react-phone-number-input');
         valid = isValidPhoneNumber(phoneValue);
       } catch (error) {
         console.error("Erro ao validar telefone", error);
-        valid = true; // Fallback em caso de erro de importação
+        valid = true;
       }
     }
 
@@ -59,8 +52,6 @@ export default function Contact() {
       return;
     }
 
-    // Se chegou aqui, pode enviar
-    // e.target.submit(); // Ou sua lógica de fetch/formspree
     const form = e.target as HTMLFormElement;
     form.submit();
   };
@@ -69,7 +60,6 @@ export default function Contact() {
     <section id="contato" className="relative py-12 sm:py-16 md:py-20 lg:py-24 xl:py-28 px-4 sm:px-6 md:px-8 container mx-auto">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-16 xl:gap-20">
         
-        {/* LADO ESQUERDO */}
         <div className="space-y-5 sm:space-y-6 md:space-y-8 lg:space-y-10">
           <motion.div 
             initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, x: -20 }} 
@@ -87,7 +77,6 @@ export default function Contact() {
               Pronto para transformar sua ideia em realidade digital com engenharia de elite?
             </p>
             <div className="p-4 sm:p-5 md:p-6 lg:p-7 xl:p-8 bg-white/[0.02] border border-white/5 rounded-xl sm:rounded-xl md:rounded-2xl space-y-2 sm:space-y-2.5 md:space-y-3 lg:space-y-3.5 xl:space-y-4 shadow-2xl relative overflow-hidden group">
-              {/* OTIMIZAÇÃO: Blur reduzido no mobile, aumentado no desktop */}
               <div className="absolute top-0 right-0 w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 bg-codexo-primary/5 blur-[20px] md:blur-[50px] group-hover:bg-codexo-primary/10 transition-colors" />
               <p className="text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] font-black tracking-[0.2em] sm:tracking-[0.25em] md:tracking-[0.275em] lg:tracking-[0.3em] text-white uppercase opacity-50">Canais Oficiais:</p>
               <div className="space-y-1 sm:space-y-1.5 text-sm sm:text-base md:text-lg font-bold">
@@ -98,7 +87,6 @@ export default function Contact() {
           </div>
         </div>
 
-        {/* LADO DIREITO: FORMULÁRIO */}
         <motion.div 
           initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }} 
           whileInView={{ opacity: 1, y: 0 }} 

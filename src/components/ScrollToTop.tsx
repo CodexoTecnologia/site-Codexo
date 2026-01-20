@@ -42,10 +42,6 @@ export default function ScrollToTop() {
     <button
       onClick={scrollToTop}
       aria-label="Voltar ao topo"
-      // MOBILE FIRST:
-      // 1. 'right-4': No celular fica no cantinho certo.
-      // 2. 'md:right-8': No desktop ganha mais ar.
-      // 3. Lógica de visibilidade via classes CSS (sem remover do DOM)
       className={`
         fixed bottom-6 right-4 md:bottom-10 md:right-8 z-[90] 
         w-10 h-10 md:w-12 md:h-12 rounded-full 

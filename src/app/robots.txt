@@ -1,12 +1,9 @@
-import { MetadataRoute } from 'next';
-
-export default function robots(): MetadataRoute.Robots {
-  return {
-    rules: {
-      userAgent: '*',
-      allow: '/',
-      disallow: '/private/', // Exemplo de bloqueio
-    },
-    sitemap: 'https://codexo.com.br/sitemap.xml',
-  };
+export default function robots() {
+  return new Response(
+    `User-agent: *\nAllow: /\nDisallow: /private/\nSitemap: https://codexo.com.br/sitemap.xml\n`, {
+      headers: {
+        'Content-Type': 'text/plain',
+      },
+    }
+  );
 }

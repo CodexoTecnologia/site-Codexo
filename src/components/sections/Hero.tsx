@@ -1,16 +1,13 @@
 import HeroButtons from '@/components/HeroButtons';
 
+// SSR: Não usar 'use client' aqui
 export default function Hero() {
   return (
-    // MUDANÇA 1: Usar min-h-[100svh] evita saltos de layout no mobile quando a barra do navegador some
     <section id="inicio" className="relative z-10 min-h-[100svh] flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 text-center overflow-hidden pt-20 sm:pt-0">
       
-      {/* BACKGROUND OTIMIZADO: Grid CSS puro (sem imagens, sem requests) */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        {/* Fundo base escuro */}
         <div className="absolute inset-0 bg-[#0B0B14]" /> 
         
-        {/* Grid CSS Leve - Renderização instantânea */}
         <div 
           className="absolute inset-0 opacity-[0.03]" 
           style={{
@@ -19,33 +16,27 @@ export default function Hero() {
           }}
         />
         
-        {/* Vignette para focar no centro e suavizar bordas */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B14] via-transparent to-[#0B0B14]/80" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#0B0B14] via-transparent to-[#0B0B14]" />
       </div>
 
-      {/* Conteúdo Principal - LCP Prioritário */}
       <div className="relative z-10 space-y-5 sm:space-y-6 max-w-5xl mx-auto flex flex-col items-center">
         
-        {/* OTIMIZAÇÃO LCP: contain-paint ajuda o browser a focar nessa área */}
         <h1 
           className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight leading-[1.1] text-white select-none px-2 drop-shadow-sm"
           style={{ contentVisibility: 'auto' }} 
         >
           Transformamos Ideias em <br className="hidden sm:block" />
-          {/* OTIMIZAÇÃO: Gradiente levemente ajustado para renderizar mais rápido em GPU mobile */}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-codexo-primary via-purple-500 to-codexo-accent uppercase pb-2">
             Realidade Digital
           </span>
         </h1>
         
-        {/* TEXT-WRAP: Balance deixa o texto bonito sem precisar de <br> manuais e melhora a leitura */}
         <p className="max-w-[280px] sm:max-w-md md:max-w-xl lg:max-w-2xl mx-auto text-slate-300 text-xs sm:text-sm md:text-base lg:text-lg font-medium leading-relaxed px-4 text-balance">
           Traduzimos a complexidade do desenvolvimento em soluções inteligentes e humanas para o mercado empresarial e cotidiano.
         </p>
       </div>
 
-      {/* CTA e Missão */}
       <div className="mt-8 sm:mt-10 md:mt-12 space-y-6 sm:space-y-8 z-20 w-full max-w-xl px-4 flex flex-col items-center">
         <HeroButtons />
 
@@ -54,7 +45,6 @@ export default function Hero() {
         </p>
       </div>
 
-      {/* Scroll Indicator - Visual Apenas */}
       <div className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30">
         <div className="w-[1px] h-8 sm:h-12 bg-gradient-to-b from-codexo-primary to-transparent" />
       </div>

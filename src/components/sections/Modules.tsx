@@ -4,7 +4,6 @@ import { motion, useReducedMotion } from "framer-motion";
 export default function Modules() {
   const shouldReduceMotion = useReducedMotion();
   
-  // Dados estáticos fora do render para evitar recriação
   const solutions = [
     { 
       title: "Sistemas Web & Alta Performance", 
@@ -52,12 +51,9 @@ export default function Modules() {
             initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }} 
             whileInView={{ opacity: 1, y: 0 }} 
             transition={shouldReduceMotion ? {} : { delay: i * 0.1 }} 
-            viewport={{ once: true, margin: "-50px" }} // Margin ajuda a disparar a animação um pouco antes
-            // OTIMIZAÇÃO: Removemos backdrop-blur-sm no mobile ou usamos um valor fixo de cor
-            // backdrop-blur é muito custoso para gpu mobile em grid
+            viewport={{ once: true, margin: "-50px" }}
             className="group relative p-5 sm:p-6 md:p-7 lg:p-8 xl:p-10 bg-[#0F0F1E] border border-white/10 rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden hover:border-codexo-primary/30 transition-colors duration-300"
           >
-            {/* Gradiente de fundo ao invés de blur para performance */}
             <div className="absolute inset-0 bg-gradient-to-br from-codexo-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
             
             <div className="relative z-10 space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6">
@@ -75,7 +71,6 @@ export default function Modules() {
 
             </div>
 
-            {/* Elemento decorativo simplificado */}
             <div className="absolute top-0 right-0 w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-18 lg:h-18 xl:w-20 xl:h-20 border-t border-r border-white/5 group-hover:border-codexo-primary/20 transition-colors pointer-events-none" />
           </motion.div>
         ))}

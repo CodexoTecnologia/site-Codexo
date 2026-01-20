@@ -1,6 +1,6 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Handshake, Eye, Zap, Heart, ShieldCheck } from 'lucide-react';
 
 type IconKey = "Parceria" | "Transparência" | "Performance" | "Empatia" | "Segurança";
@@ -14,7 +14,6 @@ type Particle = {
 };
 
 const generateParticles = (count: number): Particle[] => {
-  // Reduzido de 20 para 12 partículas para melhor performance
   return Array.from({ length: Math.min(count, 12) }, (_, i) => ({
     id: i,
     angle: (Math.random() * 360),
@@ -25,7 +24,7 @@ const generateParticles = (count: number): Particle[] => {
 };
 
 export default function About() {
-  const iconKeys: IconKey[] = ["Parceria", "Transparência", "Performance", "Empatia", "Segurança"];
+  const iconKeys: IconKey[] = useMemo(() => ["Parceria", "Transparência", "Performance", "Empatia", "Segurança"], []);
   const [selected, setSelected] = useState<IconKey>("Parceria");
   const [isScanning, setIsScanning] = useState(false);
   const [particles, setParticles] = useState<Particle[]>([]);
@@ -67,7 +66,6 @@ export default function About() {
   }, [selected]);
 
   useEffect(() => {
-    // Pausa a animação automática quando a página não está visível
     let interval: NodeJS.Timeout;
     const handleVisibilityChange = () => {
       if (document.hidden) {
@@ -77,11 +75,10 @@ export default function About() {
           const currentIndex = iconKeys.indexOf(selected);
           const nextIndex = (currentIndex + 1) % iconKeys.length;
           triggerChange(iconKeys[nextIndex]);
-        }, 10000); // Aumentado de 8s para 10s para reduzir trabalho
+        }, 10000);
       }
     };
     
-    // Delay inicial para não bloquear render
     const timeout = setTimeout(() => {
       interval = setInterval(() => {
         const currentIndex = iconKeys.indexOf(selected);
@@ -120,7 +117,6 @@ export default function About() {
         </motion.h3>
       </div>
 
-      {/* AJUSTE: gap-0 no mobile para remover espaço entre grid items */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 sm:gap-6 lg:gap-12 items-center w-full relative z-10">
         
         <div className="flex flex-col order-1 lg:order-1">
@@ -169,7 +165,6 @@ export default function About() {
             </div>
         </div>
 
-        {/* AJUSTE: mt-[-20px] no mobile para puxar o pentágono para cima */}
         <div className="order-2 lg:order-2 relative flex justify-center items-center h-[220px] sm:h-[300px] md:h-[360px] mt-[-20px] sm:mt-0 lg:mt-0">
             <div className="absolute w-32 h-32 sm:w-56 sm:h-56 md:w-72 md:h-72 bg-codexo-primary/10 blur-[40px] rounded-full" />
 
