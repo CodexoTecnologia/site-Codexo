@@ -17,6 +17,8 @@ export default function Contact() {
   const [phoneValue, setPhoneValue] = useState<string | undefined>();
   const [isPhoneValid, setIsPhoneValid] = useState(true);
   const [isValidating, setIsValidating] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   
   useEffect(() => {
     if (typeof window !== 'undefined' && !document.querySelector('link[href*="react-phone-number-input"]')) {
@@ -33,27 +35,61 @@ export default function Contact() {
     e.preventDefault();
     setIsValidating(true);
 
+    // Validar se telefone foi preenchido
+    if (!phoneValue || phoneValue.trim() === '') {
+      setIsPhoneValid(false);
+      setIsValidating(false);
+      return;
+    }
+
     let valid = false;
 
-    if (phoneValue) {
-      try {
-        const { isValidPhoneNumber } = await import('react-phone-number-input');
-        valid = isValidPhoneNumber(phoneValue);
-      } catch (error) {
-        console.error("Erro ao validar telefone", error);
-        valid = true;
-      }
+    try {
+      const { isValidPhoneNumber } = await import('react-phone-number-input');
+      valid = isValidPhoneNumber(phoneValue);
+    } catch (error) {
+      console.error("Erro ao validar telefone", error);
+      valid = true;
     }
 
     setIsPhoneValid(valid);
     setIsValidating(false);
 
-    if (!valid && phoneValue) {
+    if (!valid) {
       return;
     }
 
+    // Enviar via AJAX para evitar redirecionamento
+    setIsSubmitting(true);
     const form = e.target as HTMLFormElement;
-    form.submit();
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch('https://formspree.io/f/xnnberyp', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        setSubmitStatus('success');
+        form.reset();
+        setPhoneValue(undefined);
+        // Resetar mensagem após 5 segundos
+        setTimeout(() => setSubmitStatus('idle'), 5000);
+      } else {
+        setSubmitStatus('error');
+        setTimeout(() => setSubmitStatus('idle'), 5000);
+      }
+    } catch (error) {
+      console.error('Erro ao enviar formulário:', error);
+      setSubmitStatus('error');
+      setTimeout(() => setSubmitStatus('idle'), 5000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -95,13 +131,12 @@ export default function Contact() {
         >
           <form 
             onSubmit={handleSubmit}
-            action="https://formspree.io/f/YOUR_ID" 
             method="POST"
             className="flex flex-col h-full space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6 p-4 sm:p-5 md:p-6 lg:p-7 xl:p-8 bg-white/[0.01] border border-white/10 rounded-xl sm:rounded-2xl md:rounded-3xl backdrop-blur-sm"
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5 md:gap-4">
               <div className="space-y-1.5 sm:space-y-2">
-                <label htmlFor="contact-name" className="text-[7px] sm:text-[8px] md:text-[9px] font-black text-slate-300 uppercase tracking-widest ml-1 sm:ml-1.5 md:ml-2">Nome</label>
+                <label htmlFor="contact-name" className="text-[7px] sm:text-[8px] md:text-[9px] font-black text-slate-300 uppercase tracking-widest ml-1 sm:ml-1.5 md:ml-2">Nome *</label>
                 <input 
                   type="text" 
                   id="contact-name"
@@ -114,7 +149,7 @@ export default function Contact() {
 
               <div className="space-y-1.5 sm:space-y-2">
                 <label htmlFor="contact-phone" className="text-[7px] sm:text-[8px] md:text-[9px] font-black text-slate-300 uppercase tracking-widest ml-1 sm:ml-1.5 md:ml-2">
-                  Telefone {!isPhoneValid && <span className="text-red-500 ml-2 animate-pulse text-[6px] sm:text-[7px]"> INVÁLIDO</span>}
+                  Telefone * {!isPhoneValid && <span className="text-red-500 ml-2 animate-pulse text-[6px] sm:text-[7px]"> {phoneValue ? 'INVÁLIDO' : 'OBRIGATÓRIO'}</span>}
                 </label>
                 <div className={`codexo-phone-wrapper ${!isPhoneValid ? 'border-red-500/50' : 'border-white/10'}`}>
                   <PhoneInput
@@ -141,19 +176,18 @@ export default function Contact() {
                 id="contact-email"
                 name="email" 
                 placeholder="exemplo@dominio.com" 
-                required 
                 className="w-full bg-codexo-dark-light border border-white/10 p-2.5 sm:p-3 md:p-3.5 lg:p-4 text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs text-white outline-none focus:border-codexo-primary transition-all rounded-lg sm:rounded-lg md:rounded-xl" 
               />
             </div>
             
             <div className="space-y-1.5 sm:space-y-2 flex-grow">
               <label htmlFor="contact-message" className="text-[7px] sm:text-[8px] md:text-[9px] font-black text-slate-300 uppercase tracking-widest ml-1 sm:ml-1.5 md:ml-2">
-                Descrição do Projeto
+                Descrição do Projeto *
               </label>
               <textarea 
                 id="contact-message"
                 name="message" 
-                placeholder="Descreva seu desafio técnico..." 
+                placeholder="Descreva seu desafio..." 
                 required 
                 className="w-full h-full min-h-[100px] sm:min-h-[120px] md:min-h-[135px] lg:min-h-[150px] bg-codexo-dark-light border border-white/10 p-2.5 sm:p-3 md:p-3.5 lg:p-4 text-[9px] sm:text-[10px] md:text-[11px] lg:text-xs text-white outline-none focus:border-codexo-primary transition-all resize-none rounded-lg sm:rounded-lg md:rounded-xl" 
               />
@@ -161,20 +195,40 @@ export default function Contact() {
 
             <button 
               type="submit"
-              disabled={isValidating}
+              disabled={isValidating || isSubmitting}
               aria-label="Enviar mensagem de contato"
               className="group relative w-full h-11 sm:h-12 md:h-14 lg:h-16 bg-codexo-primary overflow-hidden transition-all rounded-lg sm:rounded-lg md:rounded-xl shadow-lg shadow-codexo-primary/20 mt-4 sm:mt-5 md:mt-6 lg:mt-8 xl:mt-10 active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
             >
               <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out opacity-10" />
               <div className="relative z-10 flex items-center justify-center gap-2 sm:gap-2.5 md:gap-3 lg:gap-4">
                 <span className="text-[8px] sm:text-[9px] md:text-[10px] lg:text-[11px] font-black tracking-[0.35em] sm:tracking-[0.4em] md:tracking-[0.45em] lg:tracking-[0.5em] text-white uppercase">
-                  {isValidating ? 'Validando...' : 'Enviar Mensagem'}
+                  {isValidating ? 'Validando...' : isSubmitting ? 'Enviando...' : 'Enviar Mensagem'}
                 </span>
-                {!isValidating && (
+                {!isValidating && !isSubmitting && (
                   <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse shadow-[0_0_10px_white]" />
                 )}
               </div>
             </button>
+
+            {/* Mensagem de Feedback */}
+            {submitStatus !== 'idle' && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className={`p-3 sm:p-4 rounded-lg border ${
+                  submitStatus === 'success' 
+                    ? 'bg-green-500/10 border-green-500/30 text-green-400' 
+                    : 'bg-red-500/10 border-red-500/30 text-red-400'
+                }`}
+              >
+                <p className="text-[9px] sm:text-[10px] md:text-xs font-bold text-center">
+                  {submitStatus === 'success' 
+                    ? 'Mensagem enviada com sucesso! Entraremos em contato em breve.' 
+                    : 'Erro ao enviar mensagem. Tente novamente ou entre em contato diretamente.'}
+                </p>
+              </motion.div>
+            )}
           </form>
         </motion.div>
       </div>
