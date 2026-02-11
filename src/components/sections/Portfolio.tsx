@@ -36,8 +36,7 @@ export default function Portfolio() {
       desc: "Site institucional para clínica de podologia com apresentação de serviços, informações, galeria e canais diretos de agendamento.",
       tags: ["Site", "SEO", "Landing Page", "Saúde"],
       status: "Ativo"
-    },
-    { id: "04", title: "Em Breve!", category: "Novidade", status: "Bloqueado" }
+    }
   ];
 
   return (
@@ -57,7 +56,7 @@ export default function Portfolio() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {projetos.map((proj) =>
           proj.url ? (
             <motion.a
