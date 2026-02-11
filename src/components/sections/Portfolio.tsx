@@ -10,24 +10,33 @@ export default function Portfolio() {
     {
       id: "01",
       title: "Elohim Verduras",
-      category: "Sistemas Web",
-      image: "/assets/prints/elohim-verduras.png", 
+      category: "Sites Institucionais",
+      image: "/assets/prints/elohim-verduras.avif", 
       url: "https://codexotecnologia.github.io/site-elohimVerduras/",
       desc: "Plataforma de presença digital e catálogo otimizado para o setor de hortifruti, focada em conversão direta.",
-      tags: ["Performance", "UI/UX", "Landing Page", "SEO"],
+      tags: ["Site", "Landing Page", "SEO", "Agronegócio"],
       status: "Ativo"
     },
     {
       id: "02",
       title: "SeuBairro",
-      category: "Plataforma Social",
-      image: "/assets/prints/seubairro.png", 
+      category: "Sistemas Web",
+      image: "/assets/prints/seubairro.avif", 
       url: "https://seubairro.codexo.com.br",
       desc: "Ecossistema digital para fomento da economia local, conectando moradores para comércio de bairro.",
-      tags: ["Economia Local", "SEO", "Landing Page"],
+      tags: ["Web App", "SEO", "Economia Local", "Marketplace"],
       status: "Ativo"
     },
-    { id: "03", title: "Em Breve!", category: "Novidade", status: "Bloqueado" }
+    {
+      id: "03",
+      title: "Juliane Costa Podóloga",
+      category: "Sites Institucionais",
+      image: "/assets/prints/juliane-costa-podologa.avif", 
+      url: "https://julianecostapodologa.com.br",
+      desc: "Site institucional para clínica de podologia com apresentação de serviços, informações, galeria e canais diretos de agendamento.",
+      tags: ["Site", "SEO", "Landing Page", "Saúde"],
+      status: "Ativo"
+    }
   ];
 
   return (
@@ -36,18 +45,18 @@ export default function Portfolio() {
       <div className="flex flex-col md:flex-row justify-between items-end mb-12 sm:mb-16 gap-6">
         <div className="space-y-4">
           <span className="text-codexo-primary font-black text-[10px] tracking-[0.5em] uppercase">
-            Pipeline de Execução //
+            Confira nossos trabalhos //
           </span>
           <h2 className="text-4xl md:text-6xl font-black text-white leading-none uppercase tracking-tighter">
             SOLUÇÕES <span className="outline-text text-white/20 italic">PUBLICADAS</span>
           </h2>
         </div>
         <p className="text-slate-300 text-[9px] font-bold uppercase tracking-[0.3em] max-w-[250px] border-l border-white/10 pl-4">
-          Engenharia aplicada em projetos reais.
+          Tecnologia aplicada em projetos reais.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {projetos.map((proj) =>
           proj.url ? (
             <motion.a
@@ -102,7 +111,7 @@ export default function Portfolio() {
                   <FaCode className="text-white/10 mt-1" />
                 </div>
                 <p className="text-slate-400 text-[11px] leading-relaxed flex-grow">
-                  {proj.desc || "Aguardando processamento de dados e finalização de protocolos de engenharia."}
+                  {proj.desc || "Aguardando processos e finalização dos nossos protocolos."}
                 </p>
                 <div className="flex flex-wrap gap-2 pt-2">
                   {proj.tags?.map((tag: string) => (
@@ -143,7 +152,7 @@ export default function Portfolio() {
                   <FaCode className="text-white/10 mt-1" />
                 </div>
                 <p className="text-slate-400 text-[11px] leading-relaxed flex-grow">
-                  {proj.desc || "Aguardando processamento de dados e finalização de protocolos de engenharia."}
+                  {proj.desc || "Aguardando processos e finalização dos nossos protocolos."}
                 </p>
                 <div className="flex flex-wrap gap-2 pt-2">
                   {proj.tags?.map((tag: string) => (
