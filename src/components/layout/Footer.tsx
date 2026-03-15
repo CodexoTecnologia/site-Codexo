@@ -1,17 +1,15 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { FaGithub } from "react-icons/fa6";
 import { FaLinkedin } from "react-icons/fa6";
 import { FaInstagram } from "react-icons/fa6";
 import { FaWhatsapp } from "react-icons/fa6";
 
 export default function Footer() {
   const socialLinks = [
-    { icon: <FaGithub />, url: "https://github.com/CodexoTecnologia" },
-    { icon: <FaLinkedin />, url: "https://www.linkedin.com/company/codexo-tecnologia" },
-    { icon: <FaInstagram />, url: "https://www.instagram.com/codexotecnologia" },
-    { icon: <FaWhatsapp />, url: "https://wa.me/5541995656346" }
+    { name: "LinkedIn", icon: <FaLinkedin />, url: "https://www.linkedin.com/company/codexo-tecnologia" },
+    { name: "Instagram", icon: <FaInstagram />, url: "https://www.instagram.com/codexotecnologia" },
+    { name: "WhatsApp", icon: <FaWhatsapp />, url: "https://wa.me/5541995656346" }
   ];
 
   const navLinks = [
@@ -52,7 +50,7 @@ export default function Footer() {
                   href={social.url} 
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={`Visite nosso perfil no ${social.url.includes('instagram') ? 'Instagram' : social.url.includes('linkedin') ? 'LinkedIn' : 'rede social'}`}
+                  aria-label={`Visite nosso perfil no ${social.name}`}
                   className="w-11 h-11 sm:w-12 sm:h-12 border border-white/10 flex items-center justify-center text-slate-400 hover:text-codexo-primary hover:border-codexo-primary hover:bg-codexo-primary/5 transition-all duration-300 rounded-lg text-sm sm:text-base"
                 >
                   {social.icon}

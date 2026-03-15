@@ -27,7 +27,6 @@ export default function StructuredData() {
       "availableLanguage": ["Portuguese"]
     },
     "sameAs": [
-      "https://github.com/CodexoTecnologia",
       "https://www.linkedin.com/company/codexo-tecnologia",
       "https://www.instagram.com/codexotecnologia"
     ]
