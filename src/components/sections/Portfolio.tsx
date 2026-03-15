@@ -12,6 +12,7 @@ export default function Portfolio() {
       title: "Elohim Verduras",
       category: "Sites Institucionais",
       image: "/assets/prints/elohim-verduras.avif", 
+      url: "https://elohimverduras.com.br/",
       desc: "Plataforma de presença digital e catálogo otimizado para o setor de hortifruti, focada em conversão direta.",
       tags: ["Site", "Landing Page", "SEO", "Agronegócio"],
       status: "Ativo"
