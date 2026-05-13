@@ -5,7 +5,7 @@ export default function HeroButtons() {
     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-5 lg:gap-6 justify-center w-full">
       {/* BOTÃO PRIMÁRIO */}
       <Link 
-        href="#contato" 
+        href="/#contato" 
         className="w-full sm:w-auto group"
       >
         <div 
@@ -24,7 +24,7 @@ export default function HeroButtons() {
 
       {/* BOTÃO SECUNDÁRIO */}
       <Link 
-        href="#portfolio" 
+        href="/#portfolio" 
         className="w-full sm:w-auto group"
       >
         <div 

@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   // Otimização de Imagens (WebP é o padrão ouro de compatibilidade/performance)
   images: {
-    formats: ['image/webp'], 
+    formats: ['image/avif', 'image/webp'], 
     minimumCacheTTL: 60,
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
@@ -30,6 +30,20 @@ const nextConfig: NextConfig = {
   
   // Headers de Cache e Segurança (Essencial para Best Practices 100)
   async headers() {
+    const contentSecurityPolicy = [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: blob:",
+      "font-src 'self' data:",
+      "connect-src 'self' https://formspree.io https://script.google.com",
+      "form-action 'self' https://formspree.io https://script.google.com",
+      "frame-ancestors 'self'",
+      "base-uri 'self'",
+      "object-src 'none'",
+      "upgrade-insecure-requests",
+    ].join("; ");
+
     return [
       {
         source: '/(.*)',
@@ -39,6 +53,8 @@ const nextConfig: NextConfig = {
           { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'origin-when-cross-origin' },
+          { key: 'Content-Security-Policy', value: contentSecurityPolicy },
+          { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
         ],
       },
       {

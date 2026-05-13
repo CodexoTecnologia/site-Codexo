@@ -1,7 +1,8 @@
 "use client";
-import { useState, useEffect } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useState } from "react";
+import { m, useReducedMotion } from "framer-motion";
 import dynamic from 'next/dynamic';
+import flags from "react-phone-number-input/flags";
 
 const PhoneInput = dynamic(() => import('react-phone-number-input').then(mod => mod.default), {
   ssr: false,
@@ -20,17 +21,6 @@ export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   
-  useEffect(() => {
-    if (typeof window !== 'undefined' && !document.querySelector('link[href*="react-phone-number-input"]')) {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = 'https://unpkg.com/react-phone-number-input@3.4.14/style.css';
-      link.media = 'print'; 
-      link.onload = () => { link.media = 'all' };
-      document.head.appendChild(link);
-    }
-  }, []);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsValidating(true);
@@ -64,29 +54,56 @@ export default function Contact() {
     const form = e.target as HTMLFormElement;
     const formData = new FormData(form);
 
-    try {
-      const response = await fetch('https://formspree.io/f/xnnberyp', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Accept': 'application/json'
-        }
-      });
+    const sheetsData = {
+      nome: formData.get("name"),
+      email: formData.get("email"),
+      telefone: phoneValue,
+      mensagem: formData.get("message"),
+      origem: "site-codexo",
+      data_hora: new Date().toLocaleString("pt-BR"),
+    };
 
-      if (response.ok) {
-        setSubmitStatus('success');
+    const GOOGLE_SHEETS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyI-nZ-P69vfCDYZxphhi38nbsyJOVAvTAIt7pLgsD5gVX8WqwgxACgz8_w0INLRfLE/exec";
+    const FORMSPREE_URL = "https://formspree.io/f/xnnberyp";
+
+    try {
+      const [sheetsResult, formspreeResult] = await Promise.allSettled([
+        fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(sheetsData),
+        }),
+        fetch(FORMSPREE_URL, {
+          method: "POST",
+          body: formData,
+          headers: {
+            Accept: "application/json",
+          },
+        }),
+      ]);
+
+      const formspreeOk =
+        formspreeResult.status === "fulfilled" &&
+        formspreeResult.value.ok;
+
+      if (formspreeOk) {
+        setSubmitStatus("success");
         form.reset();
         setPhoneValue(undefined);
-        // Resetar mensagem após 5 segundos
-        setTimeout(() => setSubmitStatus('idle'), 5000);
+        setTimeout(() => setSubmitStatus("idle"), 5000);
       } else {
-        setSubmitStatus('error');
-        setTimeout(() => setSubmitStatus('idle'), 5000);
+        setSubmitStatus("error");
+        setTimeout(() => setSubmitStatus("idle"), 5000);
+      }
+
+      if (sheetsResult.status === "rejected") {
+        console.warn("Webhook Google Sheets falhou:", sheetsResult.reason);
       }
     } catch (error) {
-      console.error('Erro ao enviar formulário:', error);
-      setSubmitStatus('error');
-      setTimeout(() => setSubmitStatus('idle'), 5000);
+      console.error("Erro ao enviar formulario:", error);
+      setSubmitStatus("error");
+      setTimeout(() => setSubmitStatus("idle"), 5000);
     } finally {
       setIsSubmitting(false);
     }
@@ -97,33 +114,35 @@ export default function Contact() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-16 xl:gap-20">
         
         <div className="space-y-5 sm:space-y-6 md:space-y-8 lg:space-y-10">
-          <motion.div 
+          <m.div 
             initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, x: -20 }} 
             whileInView={{ opacity: 1, x: 0 }} 
             viewport={{ once: true }}
           >
-            <span className="text-codexo-primary font-black text-[8px] sm:text-[9px] md:text-[10px] tracking-[0.4em] sm:tracking-[0.45em] md:tracking-[0.5em] lg:tracking-[0.55em] xl:tracking-[0.6em] uppercase">Contato</span>
+            <span className="text-codexo-accent font-black text-[10px] sm:text-[10px] md:text-[11px] tracking-[0.4em] sm:tracking-[0.45em] md:tracking-[0.5em] lg:tracking-[0.55em] xl:tracking-[0.6em] uppercase">
+              Contato
+            </span>
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-8xl font-black text-white leading-[0.9] uppercase mt-3 sm:mt-4 md:mt-5 lg:mt-6 tracking-tighter">
               VAMOS <br /> <span className="outline-text">CONSTRUIR?</span>
             </h2>
-          </motion.div>
+          </m.div>
           
           <div className="space-y-4 sm:space-y-5 md:space-y-6 lg:space-y-8">
-            <p className="text-slate-300 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed max-w-[280px] sm:max-w-xs md:max-w-sm lg:max-w-md italic border-l-2 border-codexo-primary pl-3 sm:pl-4 md:pl-5 lg:pl-6">
+            <p className="text-slate-300 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed max-w-[280px] sm:max-w-xs md:max-w-sm lg:max-w-md italic border-l-2 border-codexo-accent pl-3 sm:pl-4 md:pl-5 lg:pl-6">
               Pronto para transformar sua ideia em realidade digital com engenharia de elite?
             </p>
             <div className="p-4 sm:p-5 md:p-6 lg:p-7 xl:p-8 bg-white/[0.02] border border-white/5 rounded-xl sm:rounded-xl md:rounded-2xl space-y-2 sm:space-y-2.5 md:space-y-3 lg:space-y-3.5 xl:space-y-4 shadow-2xl relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 bg-codexo-primary/5 blur-[20px] md:blur-[50px] group-hover:bg-codexo-primary/10 transition-colors" />
-              <p className="text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] font-black tracking-[0.2em] sm:tracking-[0.25em] md:tracking-[0.275em] lg:tracking-[0.3em] text-white uppercase opacity-50">Canais Oficiais:</p>
+              <p className="text-[10px] sm:text-[10px] md:text-[11px] lg:text-[12px] font-black tracking-[0.2em] sm:tracking-[0.25em] md:tracking-[0.275em] lg:tracking-[0.3em] text-slate-300 uppercase">Canais Oficiais:</p>
               <div className="space-y-1 sm:space-y-1.5 text-sm sm:text-base md:text-lg font-bold">
-                <p className="text-codexo-primary break-all">codexotecnologia@gmail.com</p>
-                <p className="text-slate-400 font-mono">(41) 99565-6346</p>
+                <p className="text-codexo-accent break-all">codexotecnologia@gmail.com</p>
+                <p className="text-slate-300 font-mono">(41) 99565-6346</p>
               </div>
             </div>
           </div>
         </div>
 
-        <motion.div 
+        <m.div 
           initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 20 }} 
           whileInView={{ opacity: 1, y: 0 }} 
           viewport={{ once: true }} 
@@ -136,7 +155,7 @@ export default function Contact() {
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5 md:gap-4">
               <div className="space-y-1.5 sm:space-y-2">
-                <label htmlFor="contact-name" className="text-[7px] sm:text-[8px] md:text-[9px] font-black text-slate-300 uppercase tracking-widest ml-1 sm:ml-1.5 md:ml-2">Nome *</label>
+                <label htmlFor="contact-name" className="text-[10px] sm:text-[10px] md:text-[11px] font-black text-slate-300 uppercase tracking-widest ml-1 sm:ml-1.5 md:ml-2">Nome *</label>
                 <input 
                   type="text" 
                   id="contact-name"
@@ -148,29 +167,31 @@ export default function Contact() {
               </div>
 
               <div className="space-y-1.5 sm:space-y-2">
-                <label htmlFor="contact-phone" className="text-[7px] sm:text-[8px] md:text-[9px] font-black text-slate-300 uppercase tracking-widest ml-1 sm:ml-1.5 md:ml-2">
-                  Telefone * {!isPhoneValid && <span className="text-red-500 ml-2 animate-pulse text-[6px] sm:text-[7px]"> {phoneValue ? 'INVÁLIDO' : 'OBRIGATÓRIO'}</span>}
+                <label htmlFor="contact-phone" className="text-[10px] sm:text-[10px] md:text-[11px] font-black text-slate-300 uppercase tracking-widest ml-1 sm:ml-1.5 md:ml-2">
+                  Telefone * {!isPhoneValid && <span className="text-red-500 ml-2 animate-pulse text-[10px] sm:text-[10px]"> {phoneValue ? 'INVÁLIDO' : 'OBRIGATÓRIO'}</span>}
                 </label>
                 <div className={`codexo-phone-wrapper ${!isPhoneValid ? 'border-red-500/50' : 'border-white/10'}`}>
-                  <PhoneInput
-                    international
-                    defaultCountry="BR"
-                    value={phoneValue}
-                    onChange={(val) => {
-                      setPhoneValue(val);
-                      if (!isPhoneValid && val) setIsPhoneValid(true); // Limpa erro ao digitar
-                    }}
-                    countrySelectProps={{ className: "codexo-country-select" }}
-                    className="codexo-phone-input"
-                    placeholder="Número de telefone"
-                  />
+                <PhoneInput
+                  international
+                  defaultCountry="BR"
+                  countries={['BR', 'US', 'PT', 'CA', 'GB', 'ES', 'FR', 'DE', 'AR', 'UY', 'MX']} // ajuste dom size
+                  flags={flags}
+                  value={phoneValue}
+                  onChange={(val) => {
+                    setPhoneValue(val);
+                    if (!isPhoneValid && val) setIsPhoneValid(true);
+                  }}
+                  countrySelectProps={{ className: "PhoneInputCountrySelect codexo-country-select" }}
+                  className="codexo-phone-input"
+                  placeholder="Número de telefone"
+                />
                   <input type="hidden" id="contact-phone" name="phone" value={phoneValue} />
                 </div>
               </div>
             </div>
 
             <div className="space-y-1.5 sm:space-y-2">
-              <label htmlFor="contact-email" className="text-[7px] sm:text-[8px] md:text-[9px] font-black text-slate-300 uppercase tracking-widest ml-1 sm:ml-1.5 md:ml-2">E-mail</label>
+              <label htmlFor="contact-email" className="text-[10px] sm:text-[10px] md:text-[11px] font-black text-slate-300 uppercase tracking-widest ml-1 sm:ml-1.5 md:ml-2">E-mail</label>
               <input 
                 type="email"
                 id="contact-email"
@@ -181,10 +202,10 @@ export default function Contact() {
             </div>
             
             <div className="space-y-1.5 sm:space-y-2 flex-grow">
-              <label htmlFor="contact-message" className="text-[7px] sm:text-[8px] md:text-[9px] font-black text-slate-300 uppercase tracking-widest ml-1 sm:ml-1.5 md:ml-2">
+              <label htmlFor="contact-message" className="text-[10px] sm:text-[10px] md:text-[11px] font-black text-slate-300 uppercase tracking-widest ml-1 sm:ml-1.5 md:ml-2">
                 Descrição do Projeto *
               </label>
-              <textarea 
+              <m.textarea 
                 id="contact-message"
                 name="message" 
                 placeholder="Descreva seu desafio..." 
@@ -201,7 +222,7 @@ export default function Contact() {
             >
               <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out opacity-10" />
               <div className="relative z-10 flex items-center justify-center gap-2 sm:gap-2.5 md:gap-3 lg:gap-4">
-                <span className="text-[8px] sm:text-[9px] md:text-[10px] lg:text-[11px] font-black tracking-[0.35em] sm:tracking-[0.4em] md:tracking-[0.45em] lg:tracking-[0.5em] text-white uppercase">
+                <span className="text-[10px] sm:text-[10px] md:text-[11px] lg:text-[12px] font-black tracking-[0.35em] sm:tracking-[0.4em] md:tracking-[0.45em] lg:tracking-[0.5em] text-white uppercase">
                   {isValidating ? 'Validando...' : isSubmitting ? 'Enviando...' : 'Enviar Mensagem'}
                 </span>
                 {!isValidating && !isSubmitting && (
@@ -212,7 +233,7 @@ export default function Contact() {
 
             {/* Mensagem de Feedback */}
             {submitStatus !== 'idle' && (
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
@@ -222,15 +243,15 @@ export default function Contact() {
                     : 'bg-red-500/10 border-red-500/30 text-red-400'
                 }`}
               >
-                <p className="text-[9px] sm:text-[10px] md:text-xs font-bold text-center">
+                <p className="text-[10px] sm:text-[10px] md:text-xs font-bold text-center">
                   {submitStatus === 'success' 
                     ? 'Mensagem enviada com sucesso! Entraremos em contato em breve.' 
                     : 'Erro ao enviar mensagem. Tente novamente ou entre em contato diretamente.'}
                 </p>
-              </motion.div>
+              </m.div>
             )}
           </form>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

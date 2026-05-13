@@ -1,5 +1,5 @@
 "use client";
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import { FaCode, FaLock, FaArrowUpRightFromSquare } from "react-icons/fa6";
 import Image from "next/image";
 
@@ -19,12 +19,12 @@ export default function Portfolio() {
     },
     {
       id: "02",
-      title: "SeuBairro",
+      title: "mapfi",
       category: "Sistemas Web",
-      image: "/assets/prints/seubairro.avif", 
-      url: "https://seubairro.codexo.com.br",
-      desc: "Ecossistema digital para fomento da economia local, conectando moradores para comércio de bairro.",
-      tags: ["Web App", "SEO", "Economia Local", "Marketplace"],
+      image: "/assets/prints/mapfi.avif", 
+      url: "https://mapfi.codexo.com.br",
+      desc: "Plataforma digital para gestão financeira .",
+      tags: ["Web App", "Finanças", "Gestão", "Educação Financeira"],
       status: "Ativo"
     },
     {
@@ -36,22 +36,39 @@ export default function Portfolio() {
       desc: "Site institucional para clínica de podologia com apresentação de serviços, informações, galeria e canais diretos de agendamento.",
       tags: ["Site", "SEO", "Landing Page", "Saúde"],
       status: "Ativo"
+    },
+    {
+      id: "04",
+      title: "SeuBairro",
+      category: "Sistemas Web",
+      image: "/assets/prints/seubairro.avif", 
+      url: "https://seubairro.codexo.com.br",
+      desc: "Ecossistema digital para fomento da economia local, conectando moradores para comércio de bairro.",
+      tags: ["Web App", "SEO", "Economia Local", "Marketplace"],
+      status: "Ativo"
     }
   ];
 
   return (
     <section id="portfolio" className="relative py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 md:px-8 container mx-auto">
       
-      <div className="flex flex-col md:flex-row justify-between items-end mb-12 sm:mb-16 gap-6">
-        <div className="space-y-4">
-          <span className="text-codexo-primary font-black text-[10px] tracking-[0.5em] uppercase">
-            Confira nossos trabalhos //
-          </span>
-          <h2 className="text-4xl md:text-6xl font-black text-white leading-none uppercase tracking-tighter">
-            SOLUÇÕES <span className="outline-text text-white/20 italic">PUBLICADAS</span>
+      <div className="flex flex-col md:flex-row justify-between md:items-end mb-16 sm:mb-20 gap-8">
+        <div className="flex flex-col">
+          <m.span 
+            initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, x: -20 }} 
+            whileInView={{ opacity: 1, x: 0 }} 
+            viewport={{ once: true }}
+            className="text-codexo-accent font-black text-[10px] sm:text-xs tracking-[0.4em] uppercase mb-4 sm:mb-6 block"
+          >
+            Confira nossos trabalhos
+          </m.span>
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-white leading-[0.9] uppercase tracking-tighter">
+            SOLUÇÕES <br className="hidden lg:block" />
+            <span className="outline-text text-white/60 italic drop-shadow-md">PUBLICADAS</span>
           </h2>
         </div>
-        <p className="text-slate-300 text-[9px] font-bold uppercase tracking-[0.3em] max-w-[250px] border-l border-white/10 pl-4">
+        
+        <p className="text-slate-400 text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] max-w-[250px] border-l-2 border-codexo-primary/50 pl-4 md:pb-2">
           Tecnologia aplicada em projetos reais.
         </p>
       </div>
@@ -59,11 +76,12 @@ export default function Portfolio() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {projetos.map((proj) =>
           proj.url ? (
-            <motion.a
+            <m.a
               key={proj.id}
               href={proj.url}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label={`Acessar projeto ${proj.title}`}
               initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0.8 }}
               whileInView={{ opacity: 1 }}
               whileHover={shouldReduceMotion ? {} : { y: -5 }}
@@ -101,7 +119,7 @@ export default function Portfolio() {
               <div className="p-6 sm:p-8 relative z-20 space-y-4 bg-transparent md:backdrop-blur-sm flex-grow flex flex-col">
                 <div className="flex justify-between items-start">
                   <div>
-                    <span className="text-codexo-primary text-[9px] font-black tracking-[0.3em] uppercase block mb-1">
+                    <span className="text-codexo-accent text-[10px] font-black tracking-[0.3em] uppercase block mb-1">
                       {proj.category}
                     </span>
                     <h3 className="text-xl font-black text-white uppercase italic tracking-tight">
@@ -110,24 +128,24 @@ export default function Portfolio() {
                   </div>
                   <FaCode className="text-white/10 mt-1" />
                 </div>
-                <p className="text-slate-400 text-[11px] leading-relaxed flex-grow">
+                <p className="text-slate-300 text-[12px] leading-relaxed flex-grow">
                   {proj.desc || "Aguardando processos e finalização dos nossos protocolos."}
                 </p>
                 <div className="flex flex-wrap gap-2 pt-2">
                   {proj.tags?.map((tag: string) => (
-                    <span key={tag} className="text-[8px] border border-white/10 px-2 py-1 text-slate-300 font-bold uppercase tracking-widest bg-white/[0.02]">
+                    <span key={tag} className="text-[10px] border border-white/10 px-2 py-1 text-slate-300 font-bold uppercase tracking-widest bg-white/[0.02]">
                       {tag}
                     </span>
                   ))}
                 </div>
-                <div className="flex items-center gap-3 pt-4 border-t border-white/5 text-slate-300 mt-auto">
-                  <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-                  <span className="text-[8px] font-black uppercase tracking-widest opacity-70">
+                <div className="flex items-center gap-3 pt-4 border-t border-white/5 mt-auto">
+                  <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse shadow-[0_0_5px_#22c55e]" />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
                     Status: {proj.status}
                   </span>
                 </div>
               </div>
-            </motion.a>
+            </m.a>
           ) : (
             <div
               key={proj.id}
@@ -142,7 +160,7 @@ export default function Portfolio() {
               <div className="p-6 sm:p-8 relative z-20 space-y-4 bg-transparent md:backdrop-blur-sm flex-grow flex flex-col">
                 <div className="flex justify-between items-start">
                   <div>
-                    <span className="text-codexo-primary text-[9px] font-black tracking-[0.3em] uppercase block mb-1">
+                    <span className="text-codexo-primary text-[10px] font-black tracking-[0.3em] uppercase block mb-1">
                       {proj.category}
                     </span>
                     <h3 className="text-xl font-black text-white uppercase italic tracking-tight">
@@ -151,19 +169,19 @@ export default function Portfolio() {
                   </div>
                   <FaCode className="text-white/10 mt-1" />
                 </div>
-                <p className="text-slate-400 text-[11px] leading-relaxed flex-grow">
+                <p className="text-slate-300 text-[12px] leading-relaxed flex-grow">
                   {proj.desc || "Aguardando processos e finalização dos nossos protocolos."}
                 </p>
                 <div className="flex flex-wrap gap-2 pt-2">
                   {proj.tags?.map((tag: string) => (
-                    <span key={tag} className="text-[8px] border border-white/10 px-2 py-1 text-slate-300 font-bold uppercase tracking-widest bg-white/[0.02]">
+                    <span key={tag} className="text-[10px] border border-white/10 px-2 py-1 text-slate-300 font-bold uppercase tracking-widest bg-white/[0.02]">
                       {tag}
                     </span>
                   ))}
                 </div>
                 <div className="flex items-center gap-3 pt-4 border-t border-white/5 text-slate-300 mt-auto">
                   <FaLock size={8} />
-                  <span className="text-[8px] font-black uppercase tracking-widest opacity-70">
+                  <span className="text-[10px] font-black uppercase tracking-widest opacity-70">
                     Status: {proj.status}
                   </span>
                 </div>

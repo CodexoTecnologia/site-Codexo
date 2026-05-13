@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
 export default function Navbar() {
@@ -70,7 +70,7 @@ export default function Navbar() {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-[100] flex justify-center pt-3 sm:pt-4 md:pt-6 px-3 sm:px-4">
-        <motion.div
+        <m.div
           initial="initial"
           animate={isScrolled ? "scrolled" : "initial"}
           variants={navbarVariants}
@@ -114,13 +114,13 @@ export default function Navbar() {
 
             <div className="flex items-center gap-3 sm:gap-4 md:gap-6">
               <Link href="#contato" className="hidden sm:block">
-                <motion.button 
+                <m.button 
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.98 }}
                   className="px-5 py-2 md:py-2.5 bg-[var(--color-codexo-primary)] text-white font-black text-[9px] md:text-[10px] tracking-[0.2em] uppercase rounded-full transition-all hover:brightness-110 shadow-lg shadow-purple-900/20"
                 >
                   Contato
-                </motion.button>
+                </m.button>
               </Link>
 
               {/* Botão Mobile Hamburger */}
@@ -134,14 +134,14 @@ export default function Navbar() {
               </button>
             </div>
           </div>
-        </motion.div>
+        </m.div>
       </header>
 
       {/* MENU MOBILE OVERLAY */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <>
-            <motion.div
+            <m.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 0.6 }}
               exit={{ opacity: 0 }}
@@ -149,7 +149,7 @@ export default function Navbar() {
               onClick={closeMobileMenu}
             />
 
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: -10, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10, scale: 0.95 }}
@@ -160,7 +160,7 @@ export default function Navbar() {
                 <nav className="p-2">
                   <ul className="flex flex-col">
                     {navLinks.map((link, index) => (
-                      <motion.li
+                      <m.li
                         key={link.name}
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -173,7 +173,7 @@ export default function Navbar() {
                         >
                           {link.name}
                         </Link>
-                      </motion.li>
+                      </m.li>
                     ))}
                   </ul>
                   
@@ -186,7 +186,7 @@ export default function Navbar() {
                   </div>
                 </nav>
               </div>
-            </motion.div>
+            </m.div>
           </>
         )}
       </AnimatePresence>

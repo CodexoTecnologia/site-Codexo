@@ -1,12 +1,13 @@
-import HeroButtons from '@/components/HeroButtons';
+import HeroButtons from './HeroButtons'; // Ajuste o path se necessário
 
-// SSR: Não usar 'use client' aqui
+// 100% Server Side Rendering - O LCP agradece!
 export default function Hero() {
   return (
     <section id="inicio" className="relative z-10 min-h-[100svh] flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 text-center overflow-hidden pt-20 sm:pt-0">
       
+      {/* BACKGROUND ELEMENTS */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[#0B0B14]" /> 
+        <div className="absolute inset-0 bg-codexo-dark" /> 
         
         <div 
           className="absolute inset-0 opacity-[0.03]" 
@@ -16,18 +17,18 @@ export default function Hero() {
           }}
         />
         
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B14] via-transparent to-[#0B0B14]/80" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0B0B14] via-transparent to-[#0B0B14]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-codexo-dark via-transparent to-codexo-dark/80" />
+        <div className="absolute inset-0 bg-gradient-to-r from-codexo-dark via-transparent to-codexo-dark" />
       </div>
 
+      {/* TEXT CONTENT (LCP Critical) */}
       <div className="relative z-10 space-y-5 sm:space-y-6 max-w-5xl mx-auto flex flex-col items-center">
-        
         <h1 
           className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight leading-[1.1] text-white select-none px-2 drop-shadow-sm"
           style={{ contentVisibility: 'auto' }} 
         >
           Transformamos Ideias em <br className="hidden sm:block" />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-codexo-primary via-purple-500 to-codexo-accent uppercase pb-2">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-codexo-primary via-codexo-secondary to-codexo-accent uppercase pb-2">
             Realidade Digital
           </span>
         </h1>
@@ -37,10 +38,11 @@ export default function Hero() {
         </p>
       </div>
 
+      {/* ISOLAMENTO DE CLIENT COMPONENT (Botões) */}
       <div className="mt-8 sm:mt-10 md:mt-12 space-y-6 sm:space-y-8 z-20 w-full max-w-xl px-4 flex flex-col items-center">
         <HeroButtons />
 
-        <p className="text-[7px] sm:text-[8px] md:text-[9px] text-slate-500 font-bold tracking-[0.25em] sm:tracking-[0.3em] uppercase px-2 opacity-80">
+        <p className="text-[10px] sm:text-[10px] md:text-[11px] text-slate-300 font-bold tracking-[0.25em] sm:tracking-[0.3em] uppercase px-2">
           Escalando o sucesso através da tecnologia de alta performance
         </p>
       </div>

@@ -1,3 +1,5 @@
+// # Home page
+
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
@@ -23,32 +25,36 @@ export const metadata: Metadata = {
 
 // Navbar e Hero importados diretamente (críticos para LCP)
 import Navbar from '@/components/layout/Navbar';
-import Hero from '@/components/sections/Hero';
+import Hero from '@/components/sections/Hero/Hero';
 
-// ✅ Lazy load de seções abaixo da dobra
 const About = dynamic(() => import('@/components/sections/About'), {
+  ssr: true, // Renderiza no servidor para SEO, mas com fallback de loading
   loading: () => <SectionSkeleton />,
 });
 
 const Modules = dynamic(() => import('@/components/sections/Modules'), {
+  ssr: true,
   loading: () => <SectionSkeleton />,
 });
 
 const Portfolio = dynamic(() => import('@/components/sections/Portfolio'), {
+  ssr: true,
   loading: () => <SectionSkeleton />,
 });
 
 const Contact = dynamic(() => import('@/components/sections/Contact'), {
+  ssr: true,
   loading: () => <SectionSkeleton />,
 });
 
 const Footer = dynamic(() => import('@/components/layout/Footer'), {
+  ssr: true,
   loading: () => <div className="h-96 bg-codexo-dark animate-pulse" />,
 });
 
 // ✅ Widgets lazy loaded
-const WhatsAppButton = dynamic(() => import('@/components/WhatsAppButton'));
-const ScrollToTop = dynamic(() => import('@/components/ScrollToTop'));
+const WhatsAppButton = dynamic(() => import('@/components/ui/WhatsAppButton'));
+const ScrollToTop = dynamic(() => import('@/components/ui/ScrollToTop'));
 
 // ✅ Skeleton para seções em carregamento
 function SectionSkeleton() {

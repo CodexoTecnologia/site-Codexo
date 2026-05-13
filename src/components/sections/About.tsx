@@ -1,6 +1,6 @@
 "use client";
-import { motion, AnimatePresence } from "framer-motion";
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { m, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Handshake, Eye, Zap, Heart, ShieldCheck } from 'lucide-react';
 
 type IconKey = "Parceria" | "Transparência" | "Performance" | "Empatia" | "Segurança";
@@ -28,6 +28,8 @@ export default function About() {
   const [selected, setSelected] = useState<IconKey>("Parceria");
   const [isScanning, setIsScanning] = useState(false);
   const [particles, setParticles] = useState<Particle[]>([]);
+  const selectedRef = useRef<IconKey>(selected);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const pilares = {
     Parceria: { 
@@ -66,55 +68,65 @@ export default function About() {
   }, [selected]);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    selectedRef.current = selected;
+  }, [selected]);
+
+  const startInterval = useCallback(() => {
+    if (intervalRef.current) return;
+    intervalRef.current = setInterval(() => {
+      const currentIndex = iconKeys.indexOf(selectedRef.current);
+      const nextIndex = (currentIndex + 1) % iconKeys.length;
+      triggerChange(iconKeys[nextIndex]);
+    }, 10000);
+  }, [iconKeys, triggerChange]);
+
+  const stopInterval = useCallback(() => {
+    if (!intervalRef.current) return;
+    clearInterval(intervalRef.current);
+    intervalRef.current = null;
+  }, []);
+
+  useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.hidden) {
-        if (interval) clearInterval(interval);
+        stopInterval();
       } else {
-        interval = setInterval(() => {
-          const currentIndex = iconKeys.indexOf(selected);
-          const nextIndex = (currentIndex + 1) % iconKeys.length;
-          triggerChange(iconKeys[nextIndex]);
-        }, 10000);
+        startInterval();
       }
     };
-    
+
     const timeout = setTimeout(() => {
-      interval = setInterval(() => {
-        const currentIndex = iconKeys.indexOf(selected);
-        const nextIndex = (currentIndex + 1) % iconKeys.length;
-        triggerChange(iconKeys[nextIndex]);
-      }, 10000);
+      startInterval();
     }, 2000);
-    
+
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => {
       clearTimeout(timeout);
-      if (interval) clearInterval(interval);
+      stopInterval();
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [selected, triggerChange, iconKeys]);
+  }, [startInterval, stopInterval]);
 
   return (
     <section id="sobre" className="relative pt-4 sm:pt-8 md:pt-12 lg:pt-16 pb-6 sm:pb-10 px-4 sm:px-6 md:px-8 container mx-auto overflow-hidden">
       
       <div className="flex flex-col mb-4 sm:mb-6 md:mb-10 max-w-4xl">
-        <motion.span 
+        <m.span 
           initial={{ opacity: 0, x: -20 }} 
           whileInView={{ opacity: 1, x: 0 }} 
           viewport={{ once: true }}
-          className="text-codexo-primary font-black text-[8px] sm:text-[9px] md:text-[10px] tracking-[0.4em] sm:tracking-[0.45em] md:tracking-[0.5em] uppercase mb-2 sm:mb-3"
+          className="text-codexo-accent font-black text-[10px] sm:text-[10px] md:text-[11px] tracking-[0.4em] sm:tracking-[0.45em] md:tracking-[0.5em] uppercase mb-2 sm:mb-3"
         >
           Nossa Essência
-        </motion.span>
-        <motion.h3 
+        </m.span>
+        <m.h2 
           initial={{ opacity: 0, y: 20 }} 
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black tracking-tighter text-white uppercase italic"
         >
           Sobre a <span className="outline-text">Codexo</span>
-        </motion.h3>
+        </m.h2>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 sm:gap-6 lg:gap-12 items-center w-full relative z-10">
@@ -125,7 +137,7 @@ export default function About() {
                     <button
                         key={key}
                         onClick={() => !isScanning && triggerChange(key)}
-                        className={`relative px-3 py-1.5 sm:px-4 sm:py-2 rounded-md text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all duration-300 border ${
+                        className={`relative px-3 py-1.5 sm:px-4 sm:py-2 rounded-md text-[10px] sm:text-[10px] md:text-[11px] font-black uppercase tracking-widest transition-all duration-300 border ${
                             selected === key 
                             ? "bg-codexo-primary text-white border-codexo-primary shadow-lg shadow-codexo-primary/20 scale-105" 
                             : "bg-white/[0.03] text-slate-500 border-white/5 hover:border-white/20 hover:text-white"
@@ -138,7 +150,7 @@ export default function About() {
 
             <div className="relative min-h-[140px] sm:min-h-[180px]">
                 <AnimatePresence mode="wait">
-                    <motion.div
+                    <m.div
                         key={selected}
                         initial={{ opacity: 0, x: 10 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -150,17 +162,17 @@ export default function About() {
                             {selected}
                         </h3>
                         
-                        <p className="text-slate-400 text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed font-medium border-l-2 border-codexo-primary/50 pl-4">
+                        <p className="text-slate-300 text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed font-medium border-l-2 border-codexo-primary/50 pl-4">
                             {pilares[selected].desc}
                         </p>
 
                         <div className="pt-2 flex items-center gap-2 opacity-50">
                             <div className="h-1 w-8 bg-codexo-primary rounded-full" />
-                            <span className="text-[7px] text-slate-500 uppercase tracking-[0.2em] font-bold">
+                            <span className="text-[10px] text-slate-300 uppercase tracking-[0.2em] font-bold">
                                 Pilar 0{iconKeys.indexOf(selected) + 1}
                             </span>
                         </div>
-                    </motion.div>
+                    </m.div>
                 </AnimatePresence>
             </div>
         </div>
@@ -169,7 +181,7 @@ export default function About() {
             <div className="absolute w-32 h-32 sm:w-56 sm:h-56 md:w-72 md:h-72 bg-codexo-primary/10 blur-[40px] rounded-full" />
 
             <div className="absolute w-[180px] h-[180px] sm:w-[280px] sm:h-[280px] md:w-[340px] md:h-[340px] rounded-full border border-white/5 flex items-center justify-center">
-                <motion.div 
+                <m.div 
                     animate={{ rotate: 360 }}
                     transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
                     className="absolute inset-0 rounded-full border-t border-codexo-primary/20"
@@ -177,7 +189,7 @@ export default function About() {
             </div>
             
             <div className="absolute w-[130px] h-[130px] sm:w-[200px] sm:h-[200px] md:w-[240px] md:h-[240px] rounded-full border border-dashed border-white/10 flex items-center justify-center">
-                 <motion.div 
+                 <m.div 
                     animate={{ rotate: -360 }}
                     transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
                     className="absolute inset-0 rounded-full border-l border-white/10"
@@ -186,7 +198,7 @@ export default function About() {
 
             <AnimatePresence>
                 {isScanning && particles.map((p) => (
-                    <motion.div
+                    <m.div
                         key={p.id}
                         initial={{ opacity: 1, scale: 0 }}
                         animate={{ 
@@ -201,7 +213,7 @@ export default function About() {
                 ))}
             </AnimatePresence>
 
-            <motion.div 
+            <m.div 
                 animate={isScanning ? { scale: 0.95 } : { scale: 1 }}
                 className="relative w-24 h-24 sm:w-36 sm:h-36 md:w-44 md:h-44 flex items-center justify-center z-20"
                 style={{ filter: "drop-shadow(0 0 10px rgba(102, 126, 234, 0.25))" }}
@@ -210,7 +222,7 @@ export default function About() {
                 <div className="absolute inset-[1px] bg-gradient-to-br from-white/10 to-transparent clip-pentagon backdrop-blur-xl" />
 
                 <AnimatePresence mode="wait">
-                    <motion.div
+                    <m.div
                         key={selected}
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -219,18 +231,18 @@ export default function About() {
                         className="relative z-30 w-8 h-8 sm:w-14 sm:h-14 md:w-16 md:h-16 text-white"
                     >
                         {pilares[selected].icon}
-                    </motion.div>
+                    </m.div>
                 </AnimatePresence>
                 
                  {isScanning && (
-                    <motion.div 
+                    <m.div 
                         initial={{ top: "-10%", opacity: 0 }}
                         animate={{ top: "110%", opacity: [0, 0.4, 0] }}
                         transition={{ duration: 0.6 }}
                         className="absolute left-0 right-0 h-[1px] bg-white z-40 pointer-events-none blur-[0.5px]"
                     />
                 )}
-            </motion.div>
+            </m.div>
         </div>
       </div>
     </section>

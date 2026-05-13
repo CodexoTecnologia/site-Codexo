@@ -1,9 +1,0 @@
-export default function robots() {
-  return new Response(
-    `User-agent: *\nAllow: /\nDisallow: /private/\nSitemap: https://codexo.com.br/sitemap.xml\n`, {
-      headers: {
-        'Content-Type': 'text/plain',
-      },
-    }
-  );
-}
