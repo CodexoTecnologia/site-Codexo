@@ -2,6 +2,7 @@
 import { m, AnimatePresence } from "framer-motion";
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Handshake, Eye, Zap, Heart, ShieldCheck } from 'lucide-react';
+import Link from "next/link";
 
 type IconKey = "Parceria" | "Transparência" | "Performance" | "Empatia" | "Segurança";
 
@@ -110,23 +111,35 @@ export default function About() {
   return (
     <section id="sobre" className="relative pt-4 sm:pt-8 md:pt-12 lg:pt-16 pb-6 sm:pb-10 px-4 sm:px-6 md:px-8 container mx-auto overflow-hidden">
       
-      <div className="flex flex-col mb-4 sm:mb-6 md:mb-10 max-w-4xl">
-        <m.span 
-          initial={{ opacity: 0, x: -20 }} 
-          whileInView={{ opacity: 1, x: 0 }} 
-          viewport={{ once: true }}
-          className="text-codexo-accent font-black text-[10px] sm:text-[10px] md:text-[11px] tracking-[0.4em] sm:tracking-[0.45em] md:tracking-[0.5em] uppercase mb-2 sm:mb-3"
+      <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-4 sm:mb-6 md:mb-10 max-w-4xl">
+        <div>
+          <m.span 
+            initial={{ opacity: 0, x: -20 }} 
+            whileInView={{ opacity: 1, x: 0 }} 
+            viewport={{ once: true }}
+            className="text-codexo-accent font-black text-[10px] sm:text-[10px] md:text-[11px] tracking-[0.4em] sm:tracking-[0.45em] md:tracking-[0.5em] uppercase mb-2 sm:mb-3"
+          >
+            Nossa Essencia
+          </m.span>
+          <m.h2 
+            initial={{ opacity: 0, y: 20 }} 
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black tracking-tighter text-white uppercase italic"
+          >
+            Sobre a <span className="outline-text">Codexo</span>
+          </m.h2>
+        </div>
+
+        <Link 
+          href="/sobre"
+          className="group mt-4 md:mt-0 flex items-center gap-3 text-xs sm:text-sm font-bold text-slate-300 uppercase tracking-widest hover:text-white transition-colors"
         >
-          Nossa Essência
-        </m.span>
-        <m.h2 
-          initial={{ opacity: 0, y: 20 }} 
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black tracking-tighter text-white uppercase italic"
-        >
-          Sobre a <span className="outline-text">Codexo</span>
-        </m.h2>
+          <span>Ver sobre</span>
+          <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-codexo-primary group-hover:border-codexo-primary transition-all">
+            <span className="text-white">→</span>
+          </div>
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 sm:gap-6 lg:gap-12 items-center w-full relative z-10">

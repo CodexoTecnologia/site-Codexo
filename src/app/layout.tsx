@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./css/Global.css"; // Mantivemos o seu CSS perfeitamente
-import StructuredData from "@/components/StructuredData";
-import AnimationProvider from "@/components/client/AnimationProvider";
+import "./css/Global.css";
+import StructuredData from "@/components/seo/StructuredData";
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
+import ClientShell from '@/components/client/ClientShell';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,7 +24,7 @@ const geistMono = Geist_Mono({
   weight: ["400"],
 });
 
-// Metadata e Viewport mantidos exatamente como você configurou (Excelentes por sinal)
+// Metadata
 export const metadata: Metadata = {
   metadataBase: new URL("https://codexo.com.br"),
   title: {
@@ -79,12 +81,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
+      <head>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-[100svh] flex flex-col`}>
         <StructuredData />
-        <AnimationProvider>
-           {/* O Provider garante que Framer Motion seja Lazy Loaded globalmente */}
-          {children}
-        </AnimationProvider>
+        <ClientShell>
+          {/* Navbar */}
+          <Navbar />
+
+          <main className="relative z-10 flex-grow flex flex-col w-full">
+            {children}
+          </main>
+
+          {/* Footer */}
+          <Footer />
+        </ClientShell>
       </body>
     </html>
   );

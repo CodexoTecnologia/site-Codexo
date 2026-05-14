@@ -24,37 +24,28 @@ export const metadata: Metadata = {
 };
 
 // Navbar e Hero importados diretamente (críticos para LCP)
-import Navbar from '@/components/layout/Navbar';
-import Hero from '@/components/sections/Hero/Hero';
+import Hero from '@/components/sections/Home/Hero/Hero';
 
-const About = dynamic(() => import('@/components/sections/About'), {
+const About = dynamic(() => import('@/components/sections/Home/About'), {
   ssr: true, // Renderiza no servidor para SEO, mas com fallback de loading
   loading: () => <SectionSkeleton />,
 });
 
-const Modules = dynamic(() => import('@/components/sections/Modules'), {
+const Modules = dynamic(() => import('@/components/sections/Home/Modules'), {
   ssr: true,
   loading: () => <SectionSkeleton />,
 });
 
-const Portfolio = dynamic(() => import('@/components/sections/Portfolio'), {
+const Portfolio = dynamic(() => import('@/components/sections/Home/Portfolio'), {
   ssr: true,
   loading: () => <SectionSkeleton />,
 });
 
-const Contact = dynamic(() => import('@/components/sections/Contact'), {
+const BlogPreview = dynamic(() => import('@/components/sections/Home/BlogPreview'), {
   ssr: true,
   loading: () => <SectionSkeleton />,
 });
 
-const Footer = dynamic(() => import('@/components/layout/Footer'), {
-  ssr: true,
-  loading: () => <div className="h-96 bg-codexo-dark animate-pulse" />,
-});
-
-// ✅ Widgets lazy loaded
-const WhatsAppButton = dynamic(() => import('@/components/ui/WhatsAppButton'));
-const ScrollToTop = dynamic(() => import('@/components/ui/ScrollToTop'));
 
 // ✅ Skeleton para seções em carregamento
 function SectionSkeleton() {
@@ -75,37 +66,26 @@ function SectionSkeleton() {
 
 export default function HomePage() {
   return (
-    <>
-      <Navbar />
-      <main>
-        {/* ✅ Hero renderizado normalmente - acima da dobra */}
-        <Hero />
-        
-        {/* ✅ Seções lazy loaded com Suspense boundaries */}
-        <Suspense fallback={<SectionSkeleton />}>
-          <About />
-        </Suspense>
-        
-        <Suspense fallback={<SectionSkeleton />}>
-          <Modules />
-        </Suspense>
-        
-        <Suspense fallback={<SectionSkeleton />}>
-          <Portfolio />
-        </Suspense>
-        
-        <Suspense fallback={<SectionSkeleton />}>
-          <Contact />
-        </Suspense>
-      </main>
+    <div>
+      {/* ✅ Hero renderizado normalmente - acima da dobra */}
+      <Hero />
       
-      <Suspense fallback={null}>
-        <Footer />
+      {/* ✅ Seções lazy loaded com Suspense boundaries */}
+      <Suspense fallback={<SectionSkeleton />}>
+        <About />
       </Suspense>
       
-      {/* ✅ Widgets client-only */}
-      <WhatsAppButton />
-      <ScrollToTop />
-    </>
+      <Suspense fallback={<SectionSkeleton />}>
+        <Modules />
+      </Suspense>
+      
+      <Suspense fallback={<SectionSkeleton />}>
+        <Portfolio />
+      </Suspense>
+
+      <Suspense fallback={<SectionSkeleton />}>
+        <BlogPreview />
+      </Suspense>
+    </div>
   );
 }

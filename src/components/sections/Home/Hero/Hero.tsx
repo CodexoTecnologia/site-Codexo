@@ -1,6 +1,6 @@
-import HeroButtons from './HeroButtons'; // Ajuste o path se necessário
+import HeroButtons from "./HeroButtons";
 
-// 100% Server Side Rendering - O LCP agradece!
+// Server component
 export default function Hero() {
   return (
     <section id="inicio" className="relative z-10 min-h-[100svh] flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 text-center overflow-hidden pt-20 sm:pt-0">
@@ -28,7 +28,7 @@ export default function Hero() {
           style={{ contentVisibility: 'auto' }} 
         >
           Transformamos Ideias em <br className="hidden sm:block" />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-codexo-primary via-codexo-secondary to-codexo-accent uppercase pb-2">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-codexo-primary via-codexo-accent to-codexo-secondary uppercase pb-2">
             Realidade Digital
           </span>
         </h1>
@@ -38,7 +38,6 @@ export default function Hero() {
         </p>
       </div>
 
-      {/* ISOLAMENTO DE CLIENT COMPONENT (Botões) */}
       <div className="mt-8 sm:mt-10 md:mt-12 space-y-6 sm:space-y-8 z-20 w-full max-w-xl px-4 flex flex-col items-center">
         <HeroButtons />
 

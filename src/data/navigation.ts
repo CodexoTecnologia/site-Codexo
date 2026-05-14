@@ -1,8 +1,9 @@
 export const mainNav = [
-  { name: "Início", href: "/#inicio" },
-  { name: "Sobre", href: "/#sobre" },
-  { name: "Serviços", href: "/#servicos" },
-  { name: "Portfólio", href: "/#portfolio" },
+  { name: "Início", href: "/" },
+  { name: "Sobre", href: "/sobre" },
+  { name: "Serviços", href: "/servicos" },
+  { name: "Portfólio", href: "/portfolio" },
+  { name: "FAQ", href: "/faq" }
 ];
 
 export const footerNav = [

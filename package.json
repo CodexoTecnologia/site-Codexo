@@ -30,12 +30,12 @@
     "tailwindcss": "^4",
     "typescript": "^5"
   },
-  "browserslist": [ 
-    "last 2 versions",
-    "> 0.2%",
-    "not dead",
-    "not op_mini all",
-    "not ie <= 11"
+  "browserslist": [
+    "last 2 Chrome versions",
+    "last 2 Safari versions",
+    "last 2 iOS versions",
+    "last 2 Firefox versions",
+    "not ie 11"
   ]
 }
 

@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { m, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { mainNav } from "@/data/navigation";
+import ContactLink from "@/components/ui/ContactLink";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -37,12 +39,7 @@ export default function Navbar() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const navLinks = [
-    { name: "Início", href: "#inicio" },
-    { name: "Sobre", href: "#sobre" },
-    { name: "Serviços", href: "#servicos" },
-    { name: "Portfólio", href: "#portfolio" },
-  ];
+  const navLinks = [...mainNav, { name: "Blog", href: "/blog" }];
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
@@ -82,7 +79,7 @@ export default function Navbar() {
 
           <div className="relative z-20 flex items-center justify-between w-full px-4 sm:px-6 md:px-8 py-3 md:py-4">
             <Link 
-              href="#inicio" 
+              href="/" 
               className="relative w-24 h-8 sm:w-28 sm:h-9 transition-opacity hover:opacity-80 flex items-center"
             >
               <Image 
@@ -113,7 +110,7 @@ export default function Navbar() {
             </nav>
 
             <div className="flex items-center gap-3 sm:gap-4 md:gap-6">
-              <Link href="#contato" className="hidden sm:block">
+              <ContactLink className="hidden sm:block">
                 <m.button 
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.98 }}
@@ -121,7 +118,7 @@ export default function Navbar() {
                 >
                   Contato
                 </m.button>
-              </Link>
+              </ContactLink>
 
               {/* Botão Mobile Hamburger */}
               <button
@@ -178,11 +175,11 @@ export default function Navbar() {
                   </ul>
                   
                   <div className="p-2 mt-2">
-                    <Link href="#contato" onClick={closeMobileMenu}>
+                    <ContactLink onClick={closeMobileMenu}>
                       <button className="w-full py-3 bg-[var(--color-codexo-primary)] text-white font-black text-xs tracking-[0.2em] uppercase rounded-xl shadow-lg hover:brightness-110 transition-all">
                         Fale Conosco
                       </button>
-                    </Link>
+                    </ContactLink>
                   </div>
                 </nav>
               </div>
